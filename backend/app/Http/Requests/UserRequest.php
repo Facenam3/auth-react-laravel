@@ -25,12 +25,12 @@ class UserRequest extends FormRequest
     {
         return [
             "name" => ["required" , "max:255", "string"],
-            "email" => ["required", "string", "lowercase", "email", "max:255", Rule::unique(User::class)->ignore($this->user()->id)],
-            "password" => "required",
+            "email" => ["required", "string", "lowercase", "email", "max:255"],
+            "password" => ["required", "min:6"],
             "country" => ["required" ,"string", "max:255"],
             "adress" => ["required", "string" , "max:255"],
             "phone" => ["required" , "string" , "max:255"],
-            "gender" => "required",
+            "gender" => ["required", "in:male,female"],
         ];
     }
 }

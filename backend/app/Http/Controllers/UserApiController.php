@@ -44,16 +44,19 @@ class UserApiController extends Controller
         return response()->json(data: [
             "user" => $user,
             "message" => "Successfully updated user",
-        ], status: 204);
+        ], status: 201);
     }
 
     public function login(UserLoginRequest $request) {
         if(!Auth::attempt($request->only("email" , "password"))) {
             return response()->json(["message" => "Invalid credentials"], status: 401);
+          }
 
-            $request->session()->regenerate();
+            $user = Auth::user();
 
-            return response()->json(["user" => Auth::user()]);
-        }
+            $token = $user->createToken('api-token')->plainTextToken;
+
+            return response()->json(data: ["user" => Auth::user(), "message" => "Successfully logged in!"], status: 201);
+        
     }
 }
