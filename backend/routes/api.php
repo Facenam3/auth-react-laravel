@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserApiController;
 use Illuminate\Http\Request;
@@ -26,3 +27,12 @@ Route::prefix("status")->group(function() {
     Route::post("/update/{id}", [StatusController::class, "update"]);
     Route::delete("/delete/{id}", [StatusController::class, "destroy"]);
 })->middleware("auth:sanctum");
+
+
+Route::prefix("category")->group(function() {
+    Route::post("/store", [CategoryController::class, "store"]);
+    Route::get("/show/{id}", [CategoryController::class, "show"]);
+    Route::get("/edit/{id}", [CategoryController::class, "edit"]);
+    Route::post("/update/{id}", [CategoryController::class, "update"]);
+    Route::delete("/delete/{id}", [CategoryController::class, "destroy"]);
+})->middleware('auth:sanctum');
