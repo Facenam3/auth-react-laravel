@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,3 +18,11 @@ Route::prefix("users")->group(function() {
 Route::post("/login", [UserApiController::class, "login"]);
 Route::post("/logout", [UserApiController::class, "logout"])
 ->middleware("auth:sanctum");
+
+Route::prefix("status")->group(function() {
+    Route::post("/store", [StatusController::class, "store"]);
+    Route::get("/show/{id}", [StatusController::class, "show"]);
+    Route::get("/edit/{id}", [StatusController::class, "edit"]);
+    Route::post("/update/{id}", [StatusController::class, "update"]);
+    Route::delete("/delete/{id}", [StatusController::class, "destroy"]);
+})->middleware("auth:sanctum");
