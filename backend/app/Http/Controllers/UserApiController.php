@@ -28,6 +28,15 @@ class UserApiController extends Controller
         ], status: 201);
     }
 
+    public function showUser($id) {
+        $user = User::findOrFail($id);
+
+        return response()->json(data: [
+            "user" => $user,
+            "message" => "Succesfully showing the user in user Profile"
+        ]);
+    }
+
     public function editUser(UserRequest $userRequest, $id) {
         $user = User::findOrFail($id);
 
@@ -56,7 +65,19 @@ class UserApiController extends Controller
 
             $token = $user->createToken('api-token')->plainTextToken;
 
-            return response()->json(data: ["user" => Auth::user(), "message" => "Successfully logged in!"], status: 201);
-        
+            return response()->json(data: [
+                "user" => Auth::user(),
+                "token" => $token, 
+                "message" => "Successfully logged in!"
+                ], status: 201
+            );        
+    }
+
+    public function logout(Request $request) {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            "messsage" => "Succusfully logged out"
+        ], 200);
     }
 }
