@@ -26,6 +26,7 @@ Route::post("/logout", [UserApiController::class, "logout"])
 Route::prefix("status")->group(function() {
     Route::post("/store", [StatusController::class, "store"]);
     Route::get("/show/{id}", [StatusController::class, "show"]);
+    Route::get("/show-all", [StatusController::class, 'allStatuses']);
     Route::get("/edit/{id}", [StatusController::class, "edit"]);
     Route::put("/update/{id}", [StatusController::class, "update"]);
     Route::delete("/delete/{id}", [StatusController::class, "destroy"]);
@@ -34,6 +35,7 @@ Route::prefix("status")->group(function() {
 
 Route::prefix("category")->group(function() {
     Route::post("/store", [CategoryController::class, "store"]);
+    Route::get("/show-all", [CategoryController::class, 'allCategories']);
     Route::get("/show/{id}", [CategoryController::class, "show"]);
     Route::get("/edit/{id}", [CategoryController::class, "edit"]);
     Route::put("/update/{id}", [CategoryController::class, "update"]);
@@ -44,6 +46,7 @@ Route::prefix("category")->group(function() {
 Route::prefix("project")->group(function(){
     Route::post("/store", [ProjectController::class, "store"]);
     Route::get("/show/{id}", [ProjectController::class, 'show']);
+    Route::get("/show-all", [ProjectController::class, 'allProjects']);
     Route::get("/edit/{id}", [ProjectController::class, "edit"]);
     Route::put("/update/{id}", [ProjectController::class, "update"]);
     Route::delete("/delete/{id}", [ProjectController::class, "destroy"]);
@@ -53,6 +56,7 @@ Route::prefix("project")->group(function(){
 Route::prefix("task")->group(function() {
     Route::post("/store", [TaskController::class, 'store']);
     Route::get("/show/{id}", [TaskController::class, 'show']);
+    Route::get('/show-all', [TaskController::class, 'allTasks']);
     Route::get("/edit/{id}", [TaskController::class, 'edit']);
     Route::put("/update/{id}", [TaskController::class, "update"]);
     Route::delete("/delete/{id}", [TaskController::class, "destroy"]);
