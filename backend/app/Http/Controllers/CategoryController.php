@@ -62,7 +62,7 @@ class CategoryController extends Controller
         return response()->json(data: [
             "category" => $category,
             "message" => "Editing this category!"
-        ], status: 201);
+        ], status: 200);
     }
 
     /**
@@ -79,7 +79,7 @@ class CategoryController extends Controller
         return response()->json(data: [
             "category" => $category,
             "message" => "Succesfully updated category!",
-        ], status: 201);
+        ], status: 200);
     }
 
     /**
