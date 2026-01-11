@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserApiController;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,3 +38,12 @@ Route::prefix("category")->group(function() {
     Route::post("/update/{id}", [CategoryController::class, "update"]);
     Route::delete("/delete/{id}", [CategoryController::class, "destroy"]);
 })->middleware('auth:sanctum');
+
+
+Route::prefix("project")->group(function(){
+    Route::post("/store", [ProjectController::class, "store"]);
+    Route::get("/show/{id}", [ProjectController::class, 'show']);
+    Route::get("/edit/{id}", [ProjectController::class, "edit"]);
+    Route::put("/update/{id}", [ProjectController::class, "update"]);
+    Route::delete("/delete/{id}", [ProjectController::class, "destroy"]);
+})->middleware("auth:sanctum");
