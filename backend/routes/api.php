@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserApiController;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -47,3 +48,12 @@ Route::prefix("project")->group(function(){
     Route::put("/update/{id}", [ProjectController::class, "update"]);
     Route::delete("/delete/{id}", [ProjectController::class, "destroy"]);
 })->middleware("auth:sanctum");
+
+
+Route::prefix("task")->group(function() {
+    Route::post("/store", [TaskController::class, 'store']);
+    Route::get("/show/{id}", [TaskController::class, 'show']);
+    Route::get("/edit/{id}", [TaskController::class, 'edit']);
+    Route::put("/update/{id}", [TaskController::class, "update"]);
+    Route::delete("/delete/{id}", [TaskController::class, "destroy"]);
+});
