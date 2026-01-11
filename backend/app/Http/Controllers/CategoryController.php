@@ -52,6 +52,15 @@ class CategoryController extends Controller
         ], 200);
     }
 
+    public function allCategories() {
+        $categories = Category::paginate(10);
+
+        return response()->json(data: [
+            'categories' => $categories, 
+            'message' => "Showing all categories",
+        ], status: 200);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

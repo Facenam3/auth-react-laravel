@@ -58,6 +58,15 @@ class ProjectController extends Controller
         ], status: 200);
     }
 
+    public function allProjects() {
+        $projects = Project::with(['user', 'status', 'tasks'])->paginate(10);
+
+        return response()->json(data: [
+            'projects' => $projects,
+            'message' => "Showing all projects",
+        ], status: 200);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

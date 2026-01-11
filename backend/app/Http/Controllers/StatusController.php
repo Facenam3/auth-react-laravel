@@ -51,6 +51,15 @@ class StatusController extends Controller
         ], status: 200);
     }
 
+    public function allStatuses() {
+        $statuses = Status::paginate(10);
+
+        return response()->json(data: [
+            'statuses' => $statuses,
+            'message' => "Showing all statuses",
+        ], status: 200);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

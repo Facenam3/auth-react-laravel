@@ -57,6 +57,15 @@ class TaskController extends Controller
         ], status: 200);
     }
 
+    public function allTasks() {
+        $tasks = Task::with(['user', 'status', 'categories', 'projects'])->paginate(10);
+
+        return response()->json(data: [
+            'tasks' => $tasks,
+            'message' => "Showing all tasks!",
+        ], status: 200);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
