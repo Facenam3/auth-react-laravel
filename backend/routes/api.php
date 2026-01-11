@@ -26,7 +26,7 @@ Route::prefix("status")->group(function() {
     Route::post("/store", [StatusController::class, "store"]);
     Route::get("/show/{id}", [StatusController::class, "show"]);
     Route::get("/edit/{id}", [StatusController::class, "edit"]);
-    Route::post("/update/{id}", [StatusController::class, "update"]);
+    Route::put("/update/{id}", [StatusController::class, "update"]);
     Route::delete("/delete/{id}", [StatusController::class, "destroy"]);
 })->middleware("auth:sanctum");
 
@@ -35,7 +35,7 @@ Route::prefix("category")->group(function() {
     Route::post("/store", [CategoryController::class, "store"]);
     Route::get("/show/{id}", [CategoryController::class, "show"]);
     Route::get("/edit/{id}", [CategoryController::class, "edit"]);
-    Route::post("/update/{id}", [CategoryController::class, "update"]);
+    Route::put("/update/{id}", [CategoryController::class, "update"]);
     Route::delete("/delete/{id}", [CategoryController::class, "destroy"]);
 })->middleware('auth:sanctum');
 

@@ -48,7 +48,7 @@ class StatusController extends Controller
         return response()->json(data: [
             "status" => $status,
             "message" => "Show status!"
-        ], status: 201);
+        ], status: 200);
     }
 
     /**
@@ -61,7 +61,7 @@ class StatusController extends Controller
         return response()->json(data: [
             "status" => $status,
             "message" => "Edit status!"
-        ], status: 201);
+        ], status: 200);
     }
 
     /**
@@ -78,7 +78,7 @@ class StatusController extends Controller
         return response()->json(data: [
             "status" => $status,
             'message' => "Successfully updated Status!"
-        ], status: 201);
+        ], status: 200);
     }
 
     /**
