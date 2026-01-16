@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Task\TaskRequest;
 use App\Models\Task;
+use App\Models\Status;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -102,6 +103,43 @@ class TaskController extends Controller
             'message' => "Task updated successfully",
         ], status: 200);
     }
+
+    public function assignToSelf(Task $task, Request $request) {
+        if($task->assigned_to) {
+            return response()->json(data: ["message" => "Task already assigned!"], status: 400);
+        }
+
+        $task->assigned_to = $request->user()->id;
+        $task->status_id = Status::where("name", "in_progress")->first()->id;
+        $task->save();
+
+        return response()->json(data: [
+            'task' => $task,
+            "message" => "Task assigned to you successfully!"
+        ]);
+    }
+
+    public function complete(Task $task, Request $request) {
+        if($task->assigned_to !== $request->user()->id){
+            return response()->json(data: ["message" => "You are not assigned to this task!"], status: 403);
+        }
+
+        $task->completed_by = $request->user()->id;
+        $task->status_id = Status::where("name", "completed")->first()->id;
+        $task->save();
+
+        return response()->json(data: [
+            "task" => $task,
+            "message" => "Task marked as completed."
+        ]);
+     }
+
+     public function filterByStatus($statusName) {
+        $status = Status::where("name", $statusName)->firstOrFail();
+        $tasks = Task::where("status_id", $status->id)->get();
+
+        return response()->json(data: $tasks);
+     }
 
     /**
      * Remove the specified resource from storage.
