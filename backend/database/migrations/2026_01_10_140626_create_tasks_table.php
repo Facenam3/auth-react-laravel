@@ -17,7 +17,9 @@ return new class extends Migration
             $table->text("description");
             $table->foreignId("project_id")->constrained()->cascadeOnDelete();
             $table->foreignId("category_id")->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId("user_id")->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId("created_by")->constrained("users")->cascadeOnDelete();
+            $table->foreignId("assigned_to")->nullable()->constrained("users")->cascadeOnDelete();
+            $table->foreignId("completed_by")->nullable()->constrained("users")->cascadeOnDelete();
             $table->foreignId("status_id")->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();

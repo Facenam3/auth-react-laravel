@@ -49,7 +49,7 @@ class TaskApiTest extends TestCase
             'description' => "Test Description",
             'project_id' => $this->project->id,
             'category_id' => $this->category->id,
-            'user_id' => $this->user->id,
+            'created_by' => $this->user->id,
             'status_id' => $this->status->id,
         ]);
         
@@ -58,7 +58,7 @@ class TaskApiTest extends TestCase
             'title' => "Test Task",
             'project_id' => $this->project->id,
             'category_id' => $this->category->id,
-            'user_id' => $this->user->id,
+            'created_by' => $this->user->id,
             'status_id' => $this->status->id,
         ]);
     }
@@ -67,7 +67,7 @@ class TaskApiTest extends TestCase
         $task = Task::factory()->create([
             'project_id' => $this->project->id,
             'category_id' => $this->category->id,
-            'user_id' => $this->user->id,
+            'created_by' => $this->user->id,
             'status_id' => $this->status->id,
         ]);
 
@@ -83,7 +83,9 @@ class TaskApiTest extends TestCase
         $task = Task::factory()->create([
             'project_id' => $this->project->id,
             'category_id' => $this->category->id,
-            'user_id' => $this->user->id,
+            'created_by' => $this->user->id,
+            "assigned_to" => null,
+            "completed_by" => null,
             'status_id' => $this->status->id,
         ]);
 
@@ -92,7 +94,9 @@ class TaskApiTest extends TestCase
             'description' => $task->description,
             'project_id' => $this->project->id,
             'category_id' => $this->category->id,
-            'user_id' => $this->user->id,
+            'created_by' => $this->user->id,
+            "assigned_to" => null,
+            "completed_by" => null,
             'status_id' => $this->status->id,
         ]);
 
@@ -107,7 +111,7 @@ class TaskApiTest extends TestCase
         $task = Task::factory()->create([
             'project_id' => $this->project->id,
             'category_id' => $this->category->id,
-            'user_id' => $this->user->id,
+            'created_by' => $this->user->id,
             'status_id' => $this->status->id,
         ]);
 

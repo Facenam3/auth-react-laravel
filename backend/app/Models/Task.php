@@ -19,7 +19,9 @@ class Task extends Model
         'description',
         'project_id',
         'category_id',
-        'user_id',
+        'created_by',
+        "assigned_to",
+        "completed_by",
         'status_id',
     ];
 
@@ -31,8 +33,16 @@ class Task extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function creator() {
+        return $this->belongsTo(User::class, "created_by");
+    }
+
+    public function assignee() {
+        return $this->belongsTo(User::class, "assigned_to");
+    }
+
+    public function completor() {
+        return $this->belongsTo(User::class, "completed_by");
     }
 
     public function status() {

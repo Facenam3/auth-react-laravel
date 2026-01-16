@@ -34,7 +34,9 @@ class TaskController extends Controller
             'description' => $request->description,
             'project_id' => $request->project_id,
             'category_id' => $request->category_id,
-            'user_id' => $request->user_id,
+            'created_by' => $request->user()->id,
+            "assigned_to" => $request->assigned_to ?? null,
+            "completed_by" => $request->completed_by ?? null,
             'status_id' => $request->status_id,
         ]);
 

@@ -23,13 +23,20 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
+        $users = User::pluck("id")->toArray();
+        $projects = Project::pluck("id")->toArray();
+        $categories = Category::pluck("id")->toArray();
+        $statuses = Status::pluck("id")->toArray();
+
         return [
             'title' => $this->faker->sentence(4),
             'description' => $this->faker->paragraph(2),
-            'project_id' => Project::factory(),
-            'category_id' => Category::factory(),
-            'user_id' => User::factory(),
-            'status_id' => Status::factory(),
+            'project_id' => $this->faker->randomElement($projects),
+            'category_id' => $this->faker->optional()->randomElement($categories),
+            'created_by' => $this->faker->randomElement($users),
+            "assigned_to" =>$this->faker->optional()->randomElement($users),
+            "completed_by" => $this->faker->optional()->randomElement($users),
+            'status_id' => $this->faker->randomElement($statuses),
         ];
     }
 }
