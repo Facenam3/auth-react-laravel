@@ -26,7 +26,9 @@ class TaskRequest extends FormRequest
             'description' => ['required', 'string'],
             'project_id' => ['required', 'exists:projects,id'],
             'category_id' => ["required", "exists:categories,id"],
-            'user_id' => ["required" => "exists:users,id"],
+            'created_by' => ["required" => "exists:users,id"],
+            "assigned_to" => ["exists:users,id" , "nullable"],
+            "completed_by" => ['exists:users,id', "nullable"],
             'status_id' => ["required", "exists:statuses,id"],
         ];
     }
