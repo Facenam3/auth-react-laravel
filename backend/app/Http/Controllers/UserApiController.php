@@ -61,20 +61,24 @@ class UserApiController extends Controller
             return response()->json(["message" => "Invalid credentials"], status: 401);
           }
 
-            $user = Auth::user();
-
+            $user = Auth::user();            
+            $user->tokens()->delete();
             $token = $user->createToken('api-token')->plainTextToken;
 
             return response()->json(data: [
                 "user" => Auth::user(),
                 "token" => $token, 
                 "message" => "Successfully logged in!"
-                ], status: 201
+                ], status: 200
             );        
     }
 
     public function logout(Request $request) {
-        $request->user()->currentAccessToken()->delete();
+        $token = $request->user()->currentAccessToken();
+
+        if($token) {
+            $token->delete();
+        }
 
         return response()->json([
             "messsage" => "Succusfully logged out"
