@@ -31,6 +31,7 @@ class UserRequest extends FormRequest
             "adress" => ["required", "string" , "max:255"],
             "phone" => ["required" , "string" , "max:255"],
             "gender" => ["required", "in:male,female"],
+            "role" => ["string"],
         ];
     }
 }

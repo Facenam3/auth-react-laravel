@@ -19,6 +19,7 @@ class UserApiController extends Controller
             "country" => $userRequest->country,
             "adress" => $userRequest->adress,
             "phone" => $userRequest->phone,
+            "role" => "user",
             "gender" => $userRequest->gender,
         ]);
 
@@ -67,7 +68,8 @@ class UserApiController extends Controller
 
             return response()->json(data: [
                 "user" => Auth::user(),
-                "token" => $token, 
+                "token" => $token,
+                "role" => $user->role, 
                 "message" => "Successfully logged in!"
                 ], status: 200
             );        
