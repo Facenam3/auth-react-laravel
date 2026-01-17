@@ -48,4 +48,16 @@ class Task extends Model
     public function status() {
         return $this->belongsTo(Status::class);
     }
+
+    public function isOpen(): bool {
+        return $this->status->name === "open";
+    }
+
+    public function isInProgress(): bool {
+        return $this->status->name === "in_progress";
+    }
+
+    public function isCompleted(): bool {
+        return $this->status->name === "completed";
+    }
 }
