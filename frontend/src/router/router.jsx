@@ -11,6 +11,7 @@ import TasksLayout from "../pages/layouts/TasksLayout.jsx";
 import Projects from "../pages/dashboard/Projects.jsx";
 import Tasks from "../pages/dashboard/Tasks.jsx";
 import Users from "../pages/dashboard/Users.jsx";
+import ProtectedLayout from "../pages/layouts/ProtectedLayout.jsx";
 
 export const  router = createBrowserRouter([
   {
@@ -30,31 +31,37 @@ export const  router = createBrowserRouter([
           element: <RegisterPage />
         },
         {
-        path: "dashboard",
-        element: <TasksLayout />,
-        children: [
-            {
-              index: true,
-              element: <DashboardPage />,
-            },
-            {
-              path: "projects",
-              element: <Projects />
-            },
-            {
-              path: "users",
-              element: <Users />
-            },
-            {
-              path: "tasks",
-              element: <Tasks />
-            }, 
-            {
-            path: "profile",
-            element: <ProfilePage />
-            },
-        ],
-      }, 
+          path: "dashboard",
+          element: <ProtectedLayout />,
+          children: [
+              {
+                element: <TasksLayout />,
+                children: [
+                    {
+                      index: true,
+                      element: <DashboardPage />,
+                    },
+                    {
+                      path: "projects",
+                      element: <Projects />
+                    },
+                    {
+                      path: "users",
+                      element: <Users />
+                    },
+                    {
+                      path: "tasks",
+                      element: <Tasks />
+                    }, 
+                    {
+                    path: "profile",
+                    element: <ProfilePage />
+                    },
+                ],
+              }, 
+          ]
+        },
+        
     ],      
   },
   
