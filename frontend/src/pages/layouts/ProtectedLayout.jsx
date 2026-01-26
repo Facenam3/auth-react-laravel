@@ -3,9 +3,9 @@ import { useContext } from "react";
 import AuthContext from "../../store/contexts/AuthContext";
 
 export default function ProtectedLayout() {
-    const { isAuthenticated, laoding } = useContext(AuthContext);
+    const { isAuthenticated, loading } = useContext(AuthContext);
 
-    if(laoding) {
+    if(loading) {
         return <p className="text-center mt-10">Loading...</p>
     }
 

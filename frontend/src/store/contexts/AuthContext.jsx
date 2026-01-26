@@ -41,7 +41,8 @@ function authReducer(state, action) {
                 ...state, 
                 user: null,
                 isAuthenticated: false,
-                errors: [],
+                loading: false,
+                errors: null,
             };
     
         default:
@@ -68,8 +69,15 @@ export function AuthContextProvider({children}) {
     }
 
     async function logout() {
-        await logoutApi();
-        dispatchAuthAction({ type: "LOGOUT" });
+          try {
+        await logoutApi(); 
+        } catch (e) {
+            console.warn("Logout API failed, clearing client state anyway");
+            console.log(e);
+        } finally {
+            localStorage.removeItem("token");
+            dispatchAuthAction({ type: "LOGOUT" });
+        }      
     }
 
        const authContext = {
