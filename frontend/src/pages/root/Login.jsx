@@ -1,11 +1,25 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/contexts/AuthContext.jsx";
 
 export default function LoginPage() {
     const authCtx = useContext(AuthContext);
+    const navigate = useNavigate();
 
-    function handleLoginSubmit(event) {
+    async function handleLoginSubmit(event) {
         event.preventDefault();
+
+        const fd = new FormData(event.target);
+        const data = Object.fromEntries(fd.entries());
+
+        try {
+            await authCtx.login(data);
+            navigate('/dashboard');
+        } catch (error) {
+            console.error("Login failed: ", error);
+        }
+        
+       
     }
 
     return (

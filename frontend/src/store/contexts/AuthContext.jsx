@@ -1,5 +1,6 @@
 import { createContext, useReducer } from "react";
-import * as api from "../../api/auth";
+import {login as loginApi, logout as logoutApi} from "../../api/auth";
+import csrf from "../../api/csrf";
 
 const AuthContext = createContext({
     user: null,
@@ -54,17 +55,20 @@ export function AuthContextProvider({children}) {
     async function login(data) {
        dispatchAuthAction({ type: "SET_LOADING" });
        try {
-        await api.login(data);
-        const res = await api.getUser();
+        await csrf();
+        const res = await loginApi(data);
+        localStorage.setItem("token", res.data.token);
         dispatchAuthAction({ type: "LOGIN_SUCCESS", payload: res.data.user});
+
+        console.log("Login success", res.data.user);
+        return res.data.user;
        } catch (e) {
-        console.log(e);
-        dispatchAuthAction({ type: "AUTH_ERROR" , payload: "Login failed"});
+        dispatchAuthAction({ type: "AUTH_ERROR" , payload: e.response?.data?.message || "Invalid credentials."});
        }
     }
 
     async function logout() {
-        await api.logout();
+        await logoutApi();
         dispatchAuthAction({ type: "LOGOUT" });
     }
 
