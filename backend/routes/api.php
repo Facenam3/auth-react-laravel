@@ -5,18 +5,25 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserApiController;
-use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::middleware(
+    [
+        EnsureFrontendRequestsAreStateful::class, "auth:sanctum"
+    ]
+)->get("/user", function (Request $request) {
+    return response()->json(data: [
+        "user" => $request->user(),
+    ]);
+});
 
 Route::prefix("users")->group(function() {
     Route::post("/store", [UserApiController::class, "store"]);
     Route::patch("/edit/{id}", [UserApiController::class , "editUser"]);
     Route::get("/show/{id}", [UserApiController::class, "showUser"]);
+    Route::get("/all", [UserApiController::class, "getAllUsers"]);
 });
 
 Route::post("/login", [UserApiController::class, "login"]);
