@@ -1,14 +1,12 @@
 import api from "./axios";
-
-export const csrf = () => api.get("/sanctum/csrf-cookie");
+import csrf from "./csrf";
 
 export const getUsers = () => {
     return api.get('/users/all');
 }
 
 export const login = async (data) => {
-    await csrf();
-    return api.post("/login", data);
+   return api.post("/login", data);
 };
 
 export const register = async (data) => {
