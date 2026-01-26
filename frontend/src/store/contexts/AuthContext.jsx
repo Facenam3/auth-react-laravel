@@ -73,6 +73,7 @@ export function AuthContextProvider({children}) {
         await logoutApi(); 
         } catch (e) {
             console.warn("Logout API failed, clearing client state anyway");
+            console.log(e);
         } finally {
             localStorage.removeItem("token");
             dispatchAuthAction({ type: "LOGOUT" });
