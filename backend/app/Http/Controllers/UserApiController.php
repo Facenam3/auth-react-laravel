@@ -38,6 +38,15 @@ class UserApiController extends Controller
         ]);
     }
 
+    public function getAllUsers() {
+        $users = User::paginate(10);
+
+        return response()->json([
+            "users" => $users,
+            "message" => "Successfully showing 10 users."
+        ], 200);
+    }
+
     public function editUser(UserRequest $userRequest, $id) {
         $user = User::findOrFail($id);
 
@@ -58,7 +67,8 @@ class UserApiController extends Controller
     }
 
     public function login(UserLoginRequest $request) {
-        if(!Auth::attempt($request->only("email" , "password"))) {
+        try {
+           if(!Auth::attempt($request->only("email" , "password"))) {
             return response()->json(["message" => "Invalid credentials"], status: 401);
           }
 
@@ -66,13 +76,17 @@ class UserApiController extends Controller
             $user->tokens()->delete();
             $token = $user->createToken('api-token')->plainTextToken;
 
-            return response()->json(data: [
+            return response()->json([
                 "user" => Auth::user(),
                 "token" => $token,
                 "role" => $user->role, 
                 "message" => "Successfully logged in!"
-                ], status: 200
-            );        
+                ], 200
+            );       
+        } catch (\Exception $e) {
+            return response()->json(["message" => $e->getMessage()], 500);
+        }
+         
     }
 
     public function logout(Request $request) {
