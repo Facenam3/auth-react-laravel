@@ -14,27 +14,27 @@ export default function MainNavigation() {
     console.log("isAuthenticated:", isAuthenticated);
 
     return (
-        <header className="p-3 bg-blue-950 text-gray-50 shadow-md shadow-amber-200">
+        <header className="p-3 bg-gray-950 text-red-400  shadow-amber-200">
             <div className="flex justify-between items- container mx-auto">
                 <div>
-                <NavLink to="/">
+                <NavLink to="/" className="hover:text-red-600 shadow-md">
                     Logo
                 </NavLink>
             </div>
             <ul className="flex items-center gap-3"> 
                 <li>
-                    <Link to="/">Home</Link>
+                    <Link to="/" className="hover:text-red-600 shadow-md">Home</Link>
                 </li>               
                 <li>
-                    <Link to="register">Register</Link>
+                    <Link to="register" className="hover:text-red-600 shadow-md">Register</Link>
                 </li>
                 {
                     isAuthenticated ?  
                      <li>
-                        <button onClick={handleLogout}>Logout</button>
+                        <button className="hover:text-red-600 shadow-md" onClick={handleLogout}>Logout</button>
                     </li> :
                     <li>
-                        <Link to="login">Login</Link>
+                        <Link className="hover:text-red-600 shadow-md" to="login">Login</Link>
                     </li>                    
                 }
             </ul>

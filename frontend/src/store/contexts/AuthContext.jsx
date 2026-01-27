@@ -21,7 +21,7 @@ const initialState = {
 function authReducer(state, action) {
     switch (action.type) {
         case "SET_LOADING":
-            return { ...state, loading: true, errors: null};
+            return { ...state, loading: true};
 
         case "LOGIN_SUCCESS":
            return {
@@ -31,6 +31,7 @@ function authReducer(state, action) {
                 loading: false,
            };
         case "AUTH_ERROR":
+            console.log("REDUCER RECEIVED AUTH_ERROR:", action.payload);
             return {
                 ...state,
                 errors: action.payload,
@@ -44,6 +45,11 @@ function authReducer(state, action) {
                 loading: false,
                 errors: null,
             };
+        case "CLEAR_ERRORS":
+            return {
+                ...state,
+                errors: null,
+            };
     
         default:
             return state;
@@ -54,17 +60,27 @@ export function AuthContextProvider({children}) {
     const [auth, dispatchAuthAction] = useReducer(authReducer, initialState);
 
     async function login(data) {
+        dispatchAuthAction({type: "CLEAR_ERRORS"});
+
        dispatchAuthAction({ type: "SET_LOADING" });
        try {
         await csrf();
         const res = await loginApi(data);
+
         localStorage.setItem("token", res.data.token);
         dispatchAuthAction({ type: "LOGIN_SUCCESS", payload: res.data.user});
 
-        console.log("Login success", res.data.user);
-        return res.data.user;
+        return {success: true, user: res.data.user};
        } catch (e) {
-        dispatchAuthAction({ type: "AUTH_ERROR" , payload: e.response?.data?.message || "Invalid credentials."});
+        const message = 
+        e.response?.data?.message || 
+        e.response?.data?.errors?.email?.[0] ||
+        "Invalid credentials";
+
+        console.log("DISPATCHING AUTH_ERROR WITH:", message);
+        dispatchAuthAction({ type: "AUTH_ERROR" , payload: message});
+
+        return { success: false };
        }
     }
 
