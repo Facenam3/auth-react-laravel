@@ -6,7 +6,7 @@ export default function GlassmorphicCard({children}) {
         backdrop-blur-lg
         border-border-white/30
         text-white
-        max-w-1/6 mx-auto mt-10
+        max-w-1/5 mx-auto mt-10
         " >
             {children}
         </div>
