@@ -1,5 +1,12 @@
 import { createContext, useReducer } from "react";
-import * as api from "../../api/auth";
+import {
+    getUsers as getUsers, 
+    register as apiRegister,
+    update as apiUpdate,
+    deleteUser as apiDelete
+} from "../../api/auth";
+import csrf from "../../api/csrf";
+
 
 const UserContext = createContext({
     users: [],
@@ -8,7 +15,7 @@ const UserContext = createContext({
     fetchUsers: () => {},
     register: () => {},
     update: () => {},
-    delete: () => {},
+    deleteUser: () => {},
 });
 
 const initialState = {
@@ -20,21 +27,47 @@ const initialState = {
 function userReducer(state, action) {
     switch (action.type) {
         case "SET_LOADING":
-            return { ...state, loading: true, errors: false};
+            return { 
+                ...state, 
+                loading: true
+            };
         case "SET_ERROR": 
-            return { ...state, loading: false, errors: action.payload };
+            return { 
+                ...state, 
+                loading: false, 
+                errors: action.payload 
+            };
         case "SET_USERS":
-            return { ...state, users: action.payload, loading: false, errors: null };
+            return { 
+                ...state, 
+                users: action.payload, 
+                loading: false, 
+                errors: null 
+            };
         case "REGISTER": 
-            return { ...state, users: [...state.users, action.payload], loading: false, errors: null};
+            return { 
+                ...state, 
+                users: [...state.users, action.payload], 
+                loading: false, 
+                errors: null
+            };
         case "UPDATE":
             const idx = state.users.findIndex(user => user.id === action.payload.id);
             if (idx === -1) return state;
             const updatedUsers = [...state.users];
             updatedUsers[idx] = {...updatedUsers[idx], ...action.payload};
-            return { ...state, users: updatedUsers, loading: false, errors: null};
+            return { 
+                ...state, 
+                users: updatedUsers, 
+                loading: false, 
+                errors: null
+            };
         case "DELETE":
-            return { ...state, users: state.users.filter(u => u.id !== action.payload), loading: false, errors: false };
+            return { 
+                ...state, 
+                users: state.users.filter(u => u.id !== action.payload), 
+                loading: false, errors: false 
+            };
     
         default:
             return state;
@@ -47,22 +80,30 @@ export function UserContextProvider({children}) {
     const fetchUsers = async () => {
         dispatchUserAction({type: "SET_LOADING"});
         try {
-            const res =  await api.getUsers();
+            const res =  await getUsers();
             dispatchUserAction({type: "SET_USERS", payload: res.data});
+            return {success: true, users: res.data.users};
         } catch (e) {
             console.log(e);
             dispatchUserAction({type: "SET_ERROR", payload: "Failed to fetch users"});
         }
     }
 
-    const registerUser = async (data) => {
+    const register = async (data) => {
         dispatchUserAction({ type: "SET_LOADING" });
         try {
-            const res = await api.register(data);
+            await csrf();
+            const res = await apiRegister(data);
+            
             dispatchUserAction({ type: "REGISTER", payload: res.data });
+            return {success: true, users: res.data.users};
         } catch (e) {
-            console.log(e);
-            dispatchUserAction({ type: "SET_ERROR", payload: "Failed to register user." });            
+            const message = 
+            e.response?.data?.message ||
+            "Failed to register user.";
+            dispatchUserAction({ type: "SET_ERROR", payload: message });  
+            
+            return {success: false};
         }
     }
 
@@ -70,7 +111,7 @@ export function UserContextProvider({children}) {
         dispatchUserAction({ type: "SET_LOADING" });
 
         try {
-            const res = await api.updateUser(id, data);
+            const res = await apiUpdate(id, data);
             dispatchUserAction({ type: "UPDATE", payload: res.data });
         } catch (e) {
             console.log(e);
@@ -82,7 +123,7 @@ export function UserContextProvider({children}) {
         dispatchUserAction({ type: "SET_LOADING" });
 
         try {
-            await api.deleteUser(id);
+            await apiDelete(id);
             dispatchUserAction({ type: "DELETE", payload: id });
         } catch (e) {
             console.log(e);
@@ -93,7 +134,7 @@ export function UserContextProvider({children}) {
     const userContext = {
         ...user,
         fetchUsers,
-        registerUser,
+        register,
         update,
         deleteUser,
     }

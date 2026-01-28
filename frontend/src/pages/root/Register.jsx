@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+
 import CountrySelector from "../../components/UI/CountrySelector.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
 import PhoneSelector from "../../components/UI/PhoneSelector.jsx";
-import { validateRegister } from "../../validators/regisater.js";
+import { validateRegister } from "../../validators/register.js";
+import UserContext from "../../store/contexts/UserContext.jsx";
+import { useNavigate } from "react-router";
 
 export default function RegisterPage() {
+    const userCtx = useContext(UserContext);
+    const navigate = useNavigate();
+
     const [formErrors, setFormErrors] = useState({});
+
     async function handleRegisterSubmit(event) {
         event.preventDefault();
 
@@ -20,9 +27,18 @@ export default function RegisterPage() {
         }
 
         setFormErrors({});
-
+        const res = await userCtx.register(data);
+        
+        if(res.success) {
+            navigate("/login", {
+                state: {
+                    success: "Registration successfull. Please log in."
+                }
+            });
+        }
     }
     return (
+        <>
         <GlassmorphicCard>
                     <h1 className="text-center mb-5 font-bold text-3xl text-rose-700">Register Page</h1>
                     <form onSubmit={handleRegisterSubmit} className="p-5 text-center rounded-md border-2 border-rose-950">
@@ -33,6 +49,7 @@ export default function RegisterPage() {
                             type="text" 
                             name="name" 
                             id="name" 
+                            required
                             placeholder="John Doe"
                             />
                             {formErrors.name && (
@@ -46,6 +63,7 @@ export default function RegisterPage() {
                             type="email" 
                             name="email" 
                             id="email" 
+                            required
                             placeholder="Johndoe@example.com"
                             />
                             {formErrors.email && (
@@ -59,13 +77,14 @@ export default function RegisterPage() {
                             type="password" 
                             name="password" 
                             id="password" 
+                            required
                             placeholder="Password minimum length is 6 chars."
                             />
                             {formErrors.password && (
                                 <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
                             )}
                         </div>
-
+                        
                         <CountrySelector />
                         {formErrors.country && (
                             <p className="text-red-500 text-sm mt-2">{formErrors.country}</p>
@@ -78,6 +97,7 @@ export default function RegisterPage() {
                             type="text" 
                             name="adress" 
                             id="adress" 
+                            required
                             placeholder="London"
                             />
                             {formErrors.adress && (
@@ -90,7 +110,10 @@ export default function RegisterPage() {
                             )}
                         <div className="mb-3">
                             <label htmlFor="gender" className="block mb-3 text-left">Gender</label>
-                            <select className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md"  name="gender" id="gender">
+                            <select 
+                                className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md"  
+                                name="gender" id="gender"
+                                required>
                                 <option selected disabled>Select gender</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -107,12 +130,13 @@ export default function RegisterPage() {
                             Register
                             </button>                    
                         </div>
-                        {/* {authCtx.errors && (
+                        {userCtx.errors && (
                             <div className="bg-red-500/10 text-red-400 p-2 rounded mt-3">
-                                {authCtx.errors}
+                                {userCtx.errors}
                             </div>
-                        )} */}
+                        )}
                     </form>
                 </GlassmorphicCard>
+        </>        
     )
 }
