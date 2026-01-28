@@ -13,8 +13,6 @@ export default function MainNavigation() {
 
     const linkActive = "text-red-600 underline";
 
-    console.log("isAuthenticated:", isAuthenticated);
-
     return (
         <header className="p-3 bg-gray-950 text-red-400  shadow-amber-200">
             <div className="flex justify-between items- container mx-auto">
@@ -27,7 +25,6 @@ export default function MainNavigation() {
                 {!isAuthenticated && (
                     <li>
                         <NavLink to="/" end className={({isActive}) => { 
-                            console.log("Home active: " , isActive);
                             return isActive ? linkActive : "";
                          } }>Home</NavLink>
                     </li> 

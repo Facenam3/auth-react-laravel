@@ -1,10 +1,22 @@
+import CountrySelector from "../../components/UI/CountrySelector.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
+import PhoneSelector from "../../components/UI/PhoneSelector.jsx";
 
 export default function RegisterPage() {
+
+    async function handleRegisterSubmit(event) {
+        event.preventDefault();
+
+        const fd = new FormData(event.target);
+        const data = Object.fromEntries(fd.entries());
+
+        console.log(data);
+
+    }
     return (
         <GlassmorphicCard>
                     <h1 className="text-center mb-5 font-bold text-3xl text-rose-700">Register Page</h1>
-                    <form  className="p-5 text-center rounded-md border-2 border-rose-950">
+                    <form onSubmit={handleRegisterSubmit} className="p-5 text-center rounded-md border-2 border-rose-950">
                         <div className="mb-3">
                             <label htmlFor="name" className="block mb-3 text-left">Full name</label>
                             <input 
@@ -44,19 +56,9 @@ export default function RegisterPage() {
                                 <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
                             )} */}
                         </div>
-                        <div className="mb-3">
-                            <label htmlFor="country" className="block mb-3 text-left">Country</label>
-                            <input 
-                            className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md" 
-                            type="text" 
-                            name="country" 
-                            id="country" 
-                            placeholder="England"
-                            />
-                            {/* {formErrors.password && (
-                                <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
-                            )} */}
-                        </div>
+
+                        <CountrySelector />
+                        
                         <div className="mb-3">
                             <label htmlFor="adress" className="block mb-3 text-left">Adress</label>
                             <input 
@@ -70,23 +72,14 @@ export default function RegisterPage() {
                                 <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
                             )} */}
                         </div>
-                        <div className="mb-3">
-                            <label htmlFor="phone" className="block mb-3 text-left">Phone</label>
-                            <input 
-                            className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md" 
-                            type="text" 
-                            name="phone" 
-                            id="phone" 
-                            placeholder="4455 554455 455"
-                            />
+                        <PhoneSelector />
                             {/* {formErrors.password && (
                                 <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
                             )} */}
-                        </div>
                         <div className="mb-3">
-                            <label htmlFor="gender" className="block mb-3 text-left">gender</label>
+                            <label htmlFor="gender" className="block mb-3 text-left">Gender</label>
                             <select className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md"  name="gender" id="gender">
-                                <option value="" disabled>Select gender</option>
+                                <option value="select" disabled>Select gender</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
