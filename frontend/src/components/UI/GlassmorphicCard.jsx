@@ -4,7 +4,7 @@ export default function GlassmorphicCard({children}) {
         p-6 rounded-xl shadow-lg
         bg-white/15
         backdrop-blur-lg
-        border-border-white/30
+        border border-white/30
         text-white
         max-w-1/5 mx-auto mt-10
         " >
