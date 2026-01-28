@@ -20,12 +20,12 @@ Route::middleware(
 });
 
 Route::prefix("users")->group(function() {
-    Route::post("/store", [UserApiController::class, "store"]);
     Route::patch("/edit/{id}", [UserApiController::class , "editUser"]);
     Route::get("/show/{id}", [UserApiController::class, "showUser"]);
     Route::get("/all", [UserApiController::class, "getAllUsers"]);
-});
+})->middleware("auth:sanctum");
 
+Route::post("/register", [UserApiController::class, "store"]);
 Route::post("/login", [UserApiController::class, "login"]);
 Route::post("/logout", [UserApiController::class, "logout"])
 ->middleware("auth:sanctum");
