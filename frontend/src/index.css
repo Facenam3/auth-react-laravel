@@ -2,5 +2,15 @@ h1 {
     font-family: "Merriweather", serif;
 }
 
+.r-csc {
+  background-color: white !important;
+  color: #1f2937 !important;
+}
+
+.r-csc__option {
+  background-color: white !important;
+  color: #1f2937 !important;
+}
+
 @import "tailwindcss";
 

@@ -9,7 +9,6 @@ export default function PhoneSelector() {
             <label htmlFor="phone" className="block mb-3 text-left">Phone</label>
             <PhoneInput 
             className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md"
-            defaultCountry="mk"
             value={phone}
             onChange={setPhone}
             name="phone"

@@ -1,16 +1,25 @@
+import { useState } from "react";
 import CountrySelector from "../../components/UI/CountrySelector.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
 import PhoneSelector from "../../components/UI/PhoneSelector.jsx";
+import { validateRegister } from "../../validators/regisater.js";
 
 export default function RegisterPage() {
-
+    const [formErrors, setFormErrors] = useState({});
     async function handleRegisterSubmit(event) {
         event.preventDefault();
 
         const fd = new FormData(event.target);
         const data = Object.fromEntries(fd.entries());
 
-        console.log(data);
+        const errors = validateRegister(data);
+
+        if(Object.keys(errors).length > 0){
+            setFormErrors(errors);
+            return;
+        }
+
+        setFormErrors({});
 
     }
     return (
@@ -26,9 +35,9 @@ export default function RegisterPage() {
                             id="name" 
                             placeholder="John Doe"
                             />
-                            {/* {formErrors.email && (
-                                <p className="text-red-500 text-sm mt-2">{formErrors.email}</p>
-                            )} */}
+                            {formErrors.name && (
+                                <p className="text-red-500 text-sm mt-2">{formErrors.name}</p>
+                            )}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="email" className="block mb-3 text-left">Email</label>
@@ -39,9 +48,9 @@ export default function RegisterPage() {
                             id="email" 
                             placeholder="Johndoe@example.com"
                             />
-                            {/* {formErrors.email && (
+                            {formErrors.email && (
                                 <p className="text-red-500 text-sm mt-2">{formErrors.email}</p>
-                            )} */}
+                            )}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="password" className="block mb-3 text-left">Password</label>
@@ -52,12 +61,15 @@ export default function RegisterPage() {
                             id="password" 
                             placeholder="Password minimum length is 6 chars."
                             />
-                            {/* {formErrors.password && (
+                            {formErrors.password && (
                                 <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
-                            )} */}
+                            )}
                         </div>
 
                         <CountrySelector />
+                        {formErrors.country && (
+                            <p className="text-red-500 text-sm mt-2">{formErrors.country}</p>
+                        )}
                         
                         <div className="mb-3">
                             <label htmlFor="adress" className="block mb-3 text-left">Adress</label>
@@ -68,24 +80,24 @@ export default function RegisterPage() {
                             id="adress" 
                             placeholder="London"
                             />
-                            {/* {formErrors.password && (
-                                <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
-                            )} */}
+                            {formErrors.adress && (
+                                <p className="text-red-500 text-sm mt-2">{formErrors.adress}</p>
+                            )}
                         </div>
                         <PhoneSelector />
-                            {/* {formErrors.password && (
-                                <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
-                            )} */}
+                            {formErrors.phone && (
+                                <p className="text-red-500 text-sm mt-2">{formErrors.phone}</p>
+                            )}
                         <div className="mb-3">
                             <label htmlFor="gender" className="block mb-3 text-left">Gender</label>
                             <select className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md"  name="gender" id="gender">
-                                <option value="select" disabled>Select gender</option>
+                                <option selected disabled>Select gender</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
-                            {/* {formErrors.password && (
-                                <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
-                            )} */}
+                            {formErrors.gender && (
+                                <p className="text-red-500 text-sm mt-2">{formErrors.gender}</p>
+                            )}
                         </div>
                         <div className="flex justify-center items-center">
                             <button 
