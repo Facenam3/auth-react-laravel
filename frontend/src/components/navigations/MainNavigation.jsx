@@ -11,6 +11,8 @@ export default function MainNavigation() {
         navigate("/login", { replace: true });
     }
 
+    const linkActive = "text-red-600 underline";
+
     console.log("isAuthenticated:", isAuthenticated);
 
     return (
@@ -22,19 +24,34 @@ export default function MainNavigation() {
                 </NavLink>
             </div>
             <ul className="flex items-center gap-3"> 
-                <li>
-                    <Link to="/" className="hover:text-red-600 shadow-md">Home</Link>
-                </li>               
-                <li>
-                    <Link to="register" className="hover:text-red-600 shadow-md">Register</Link>
-                </li>
+                {!isAuthenticated && (
+                    <li>
+                        <NavLink to="/" end className={({isActive}) => { 
+                            console.log("Home active: " , isActive);
+                            return isActive ? linkActive : "";
+                         } }>Home</NavLink>
+                    </li> 
+                )}
+                {!isAuthenticated && (
+                    <li>
+                        <NavLink to="/register" end className={({isActive}) => ( isActive ? linkActive : "" )}>Register</NavLink>
+                    </li>
+                )}
+                {isAuthenticated && (
+                    <li>
+                        <NavLink to="/dashboard" end className={({isActive}) => ( isActive ? linkActive : "" )}>
+                            Dashboard
+                        </NavLink>
+                    </li>
+                )}           
+                
                 {
                     isAuthenticated ?  
                      <li>
-                        <button className="hover:text-red-600 shadow-md" onClick={handleLogout}>Logout</button>
+                        <button className="hover:text-red-600 shadow-md cursor-pointer" onClick={handleLogout}>Logout</button>
                     </li> :
                     <li>
-                        <Link className="hover:text-red-600 shadow-md" to="login">Login</Link>
+                        <NavLink to="/login" end className={({isActive}) => ( isActive ? linkActive : "" )} >Login</NavLink>
                     </li>                    
                 }
             </ul>
