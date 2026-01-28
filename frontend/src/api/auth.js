@@ -18,6 +18,14 @@ export const logout = async () => {
     return api.post("/logout");
 };
 
+export const update = async (id, data) => {
+    return api.post("/users/update", {id, data});
+};
+
+export const deleteUser = async (id) => {
+    return api.delete("/users/delete", id);
+};
+
 export const getUser = () => {
     return api.get("/user");
 }

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../../store/contexts/AuthContext.jsx";
 import { validateLogin } from "../../validators/auth.js";
 
@@ -9,6 +9,10 @@ export default function LoginPage() {
     const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
 
+    const location = useLocation();
+    const [successMsg , setSuccessMsg] = useState(
+        location.state?.success || ""
+    );
     const [formErrors, setFormErrors] = useState({});
 
     useEffect(() => {
@@ -38,12 +42,19 @@ export default function LoginPage() {
             return;
         }
         setFormErrors({});
-
+        setSuccessMsg("");
         await authCtx.login(data);      
     }
 
     return (
         <GlassmorphicCard>
+            {
+                successMsg && (
+                    <div className="mb-4 p-2 text-center rounded-md bg-green-500/15 text-green-400 text-sm">
+                        {successMsg}
+                    </div>
+                )
+            }
             <h1 className="text-center mb-5 font-bold text-3xl text-rose-700">Login Page</h1>
             <form onSubmit={handleLoginSubmit} className="p-5 text-center rounded-md border-2 border-rose-950">
                 <div className="mb-3">

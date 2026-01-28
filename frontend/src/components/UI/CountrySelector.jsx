@@ -16,7 +16,9 @@ export default function CountrySelector() {
                 placeholder="Select a country"
                 className="text-gray-950"
                 classNamePrefix="custom-select"
+                defaultInputValue="MK"
                 name="country"
+                required
             />
         </div>
     )
