@@ -64,6 +64,7 @@ export default function LoginPage() {
                     type="email" 
                     name="email" 
                     id="email" 
+                    required
                     placeholder="Johndoe@example.com"
                     />
                     {formErrors.email && (
@@ -77,6 +78,7 @@ export default function LoginPage() {
                     type="password" 
                     name="password" 
                     id="password" 
+                    required
                     />
                     {formErrors.password && (
                         <p className="text-red-500 text-sm mt-2">{formErrors.password}</p>
