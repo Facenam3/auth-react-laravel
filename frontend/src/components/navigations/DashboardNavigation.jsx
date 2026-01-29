@@ -6,7 +6,7 @@ export default function DashboarNavigation() {
 
     return (
         <aside className="p-3 bg-gray-900 w-1/5 min-h-screen">
-            <di className="text-center p-3">
+            <div className="text-center p-3">
                 <ul className="flex flex-col gap-8 text-red-400 text-md">
                     <li>
                         <NavLink to="" end className={({isActive}) => isActive ? active : undefined}>Dashboard</NavLink>
@@ -21,7 +21,7 @@ export default function DashboarNavigation() {
                         <NavLink to="tasks" className={({isActive}) => isActive ? active : undefined}>Tasks</NavLink>
                     </li>
                 </ul>
-            </di>
+            </div>
         </aside>
     )
 }
