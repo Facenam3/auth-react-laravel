@@ -1,8 +1,8 @@
 import api from "./axios";
 import csrf from "./csrf";
 
-export const getUsers = () => {
-    return api.get('/users/all');
+export const getUsers = (page = 1) => {
+    return api.get(`/users/all?page=${page}`);
 }
 
 export const login = async (data) => {
