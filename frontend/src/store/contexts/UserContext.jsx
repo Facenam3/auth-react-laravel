@@ -19,7 +19,11 @@ const UserContext = createContext({
 });
 
 const initialState = {
-    users: [],
+    users: {
+        data: [],
+        currentPage: 1,
+        lastPage: 1,
+    },    
     loading: false, 
     errors: null
 };
@@ -31,6 +35,11 @@ function userReducer(state, action) {
                 ...state, 
                 loading: true
             };
+        case "SET_LOADING_DONE":
+            return {
+                ...state,
+                loading: false,
+            }
         case "SET_ERROR": 
             return { 
                 ...state, 
@@ -40,16 +49,13 @@ function userReducer(state, action) {
         case "SET_USERS":
             return { 
                 ...state, 
-                users: action.payload, 
+                users:{ 
+                    data: action.payload.users, 
+                    currentPage: action.payload.current_page,
+                    lastPage: action.payload.last_page,
+                },
                 loading: false, 
                 errors: null 
-            };
-        case "REGISTER": 
-            return { 
-                ...state, 
-                users: [...state.users, action.payload], 
-                loading: false, 
-                errors: null
             };
         case "UPDATE":
             const idx = state.users.findIndex(user => user.id === action.payload.id);
@@ -68,6 +74,11 @@ function userReducer(state, action) {
                 users: state.users.filter(u => u.id !== action.payload), 
                 loading: false, errors: false 
             };
+        case "CLEAR_ERRORS":
+            return {
+                ...state,
+                errors: null,
+            };
     
         default:
             return state;
@@ -77,15 +88,24 @@ function userReducer(state, action) {
 export function UserContextProvider({children}) {
     const [user, dispatchUserAction] = useReducer(userReducer, initialState);
 
-    const fetchUsers = async () => {
+    const fetchUsers = async (page = 1) => {
         dispatchUserAction({type: "SET_LOADING"});
         try {
-            const res =  await getUsers();
-            dispatchUserAction({type: "SET_USERS", payload: res.data});
-            return {success: true, users: res.data.users};
+            const res =  await getUsers(page);
+
+            dispatchUserAction({ 
+                type: "SET_USERS", 
+                payload: res.data
+            });
+
+            dispatchUserAction({ type: "SET_LOADING", payload: false });
+
+            return { success: true };
         } catch (e) {
             console.log(e);
             dispatchUserAction({type: "SET_ERROR", payload: "Failed to fetch users"});
+
+            return {success: false};
         }
     }
 
@@ -95,13 +115,21 @@ export function UserContextProvider({children}) {
             await csrf();
             const res = await apiRegister(data);
             
-            dispatchUserAction({ type: "REGISTER", payload: res.data });
-            return {success: true, users: res.data.users};
+            dispatchUserAction({ type: "SET_LOADING", payload: false });
+            dispatchUserAction({ type: "SET_ERROR", payload: null });
+
+            return {
+                success: true, 
+                users: res.data.user
+            };
+
         } catch (e) {
             const message = 
             e.response?.data?.message ||
             "Failed to register user.";
-            dispatchUserAction({ type: "SET_ERROR", payload: message });  
+
+            dispatchUserAction({ type: "SET_ERROR", payload: message });
+            dispatchUserAction({ type: "SET_LOADING", payload: false });  
             
             return {success: false};
         }
