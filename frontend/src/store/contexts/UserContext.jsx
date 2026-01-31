@@ -50,9 +50,9 @@ function userReducer(state, action) {
             return { 
                 ...state, 
                 users:{ 
-                    data: action.payload.users, 
-                    currentPage: action.payload.current_page,
-                    lastPage: action.payload.last_page,
+                    data: action.payload.users ?? [], 
+                    currentPage: action.payload.current_page ?? 1,
+                    lastPage: action.payload.last_page ?? 1,
                 },
                 loading: false, 
                 errors: null 
@@ -98,7 +98,7 @@ export function UserContextProvider({children}) {
                 payload: res.data
             });
 
-            dispatchUserAction({ type: "SET_LOADING", payload: false });
+            dispatchUserAction({ type: "SET_LOADING_DONE" });
 
             return { success: true };
         } catch (e) {
