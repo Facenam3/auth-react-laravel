@@ -3,16 +3,22 @@ import { useContext, useEffect } from "react";
 import UserContext from "../../store/contexts/UserContext.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
 import PagePagination from "../../components/UI/PagePagination.jsx";
+import LoadingPage from "../../components/UI/Loading.jsx";
 
 export default function Users() {
-    const userCtx = useContext(UserContext);
+    const { users, loading, fetchUsers } = useContext(UserContext);
 
     useEffect(() => {
-        userCtx.fetchUsers();
+        fetchUsers();
     },[]);
 
-    const users = userCtx.users.data;
+    const usersList = users?.data?.data ?? [];
 
+    if(loading) {
+        return <LoadingPage >Loading users..</LoadingPage>
+    };
+
+    console.log(users);
     return (
         <div className="container mx-auto p-10 mt-10">
             <GlassmorphicCard table>
@@ -46,7 +52,7 @@ export default function Users() {
                         </thead> 
                         <tbody className="mt-2 bg-amber-100/15">
                                 {
-                                    users.data.map((user) => (
+                                    usersList.map((user) => (
                                         <tr key={user.id} className="border-b-2 border-amber-50">
                                         <td className="px-3 py-2">
                                             {user.name}
@@ -73,9 +79,9 @@ export default function Users() {
                 </div>
                 <div className="footer mt-2">
                     <PagePagination 
-                    currentPage={users.current_page}
-                    lastPage={users.last_page}
-                    onPageChange={userCtx.fetchUsers}
+                    currentPage={users.data.current_page}
+                    lastPage={users.data.last_page}
+                    onPageChange={fetchUsers}
                     />
                 </div>
             </GlassmorphicCard>
