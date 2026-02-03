@@ -65,7 +65,7 @@ function projectReducer(state, action) {
         case "DELETE" :
             return {
                 ...state,
-                projects: state.projects.filter(p => p.id !== action.payload);
+                projects: state.projects.filter(p => p.id !== action.payload),
                 loading: false,
                 errors: null,
             };
