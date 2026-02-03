@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Project\ProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Models\Status;
 
 class ProjectController extends Controller
 {
@@ -79,6 +80,13 @@ class ProjectController extends Controller
             "message" => "Successfuly editing project",
         ], status: 200);
     }
+
+    public function filterByStatus($statusName) {
+        $status = Status::where("name", $statusName)->firstOrFail();
+        $projects = Project::where("status_id", $status->id)->get();
+
+        return response()->json(data: $projects);
+     }
 
     /**
      * Update the specified resource in storage.
