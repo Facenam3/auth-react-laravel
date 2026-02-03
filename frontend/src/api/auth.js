@@ -1,5 +1,4 @@
 import api from "./axios";
-import csrf from "./csrf";
 
 export const getUsers = (page = 1) => {
     return api.get(`/users/all?page=${page}`);
@@ -10,7 +9,6 @@ export const login = async (data) => {
 };
 
 export const register = async (data) => {
-    await csrf();
     return api.post("/register", data);
 };
 
