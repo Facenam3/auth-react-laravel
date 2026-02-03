@@ -3,6 +3,7 @@ import { router } from "./router/router.jsx";
 
 import { UserContextProvider } from "./store/contexts/UserContext.jsx";
 import { AuthContextProvider } from "./store/contexts/AuthContext.jsx";
+import { ProjectContext } from "./store/contexts/ProjectContext.jsx";
 
 
 function App() {
@@ -10,7 +11,9 @@ function App() {
   return (
     <UserContextProvider>
       <AuthContextProvider>
-        <RouterProvider router={router} />
+        <ProjectContext>
+           <RouterProvider router={router} />
+        </ProjectContext>       
       </AuthContextProvider>
     </UserContextProvider>
   )

@@ -4,11 +4,15 @@ export const getProjects = (page = 1) => {
     return api.get(`/project/show-all?page=${page}`);
 }
 
-export const updatProject = (id) => {
-    return api.get(`/project/update/${id}`);
+export const store = async (data) => {
+    return api.get(`/project/store`, data);
 }
 
-export const showProject = (id) => {
+export const updateProject = async (id, data) => {
+    return api.get(`/project/update/${id}`, {id, data});
+}
+
+export const showProject = async (id) => {
     return api.get(`/project/show/${id}`);
 }
 
@@ -19,3 +23,4 @@ export const deleteProject = (id) => {
 export const getByStatus = (status) => {
     return api.get(`/project/status/${status}`);
 }
+
