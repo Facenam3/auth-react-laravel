@@ -1,28 +1,28 @@
 import { createContext, useReducer } from "react";
-import * as api from "../../api/projects";
+import * as api from "../../api/tasks";
 import csrf from "../../api/csrf";
 
-const ProjectContext = createContext({
-    projects: [],
+const TaskContext = createContext({
+    tasks: [],
     loading: false,
     errors: null,
-    fetchProjects: () => {},
+    fetchTasks: () => {},
     getByStatus: () => {},
-    update: () => {},
-    deleteProject: () => {},
+    updateTask: () => {},
+    deleteTask: () => {},
 });
 
 const initialState = {
-    projects: {
+    tasks: {
         data: [],
         currentPage: 1,
         lastPage: 1,
     },
     loading: false,
-    errors: null
+    errors: null,
 };
 
-function projectReducer(state, action) {
+function taskReducer(state, action) {
     switch (action.type) {
         case "SET_LOADING":
             return {
@@ -40,11 +40,11 @@ function projectReducer(state, action) {
                 loading: false,
                 errors: action.payload,
             };
-        case "SET_PROJECTS":
+        case "SET_TASKS":
             return {
                 ...state,
-                projects: {
-                    data: action.payload.projects ?? [],
+                tasks: {
+                    data: action.payload.tasks ?? [],
                     currentPage: action.payload.current_page ?? 1,
                     lastPage: action.payload.last_page ?? 1,
                 },
@@ -52,20 +52,20 @@ function projectReducer(state, action) {
                 errors: null,
             };
         case "UPDATE":
-            const idx = state.projects.findIndex(project => project.id === action.payload.id);
-            if (idx === -1) return state;
-            const updatedProjects = [...state.projects];
-            updatedProjects[idx] = {...updatedProjects[idx], ...action.payload};
+            const idx = state.tasks.findIndex(task => task.id === action.payload.id);
+            if(idx === -1) return state;
+            const updatedTasks = [...state.tasks];
+            updatedTasks[idx] = {...updatedTasks[idx], ...action.payload.id};
             return {
                 ...state,
-                projects: updatedProjects,
+                tasks: updatedTasks,
                 loading: false,
                 errors: null,
             };
         case "DELETE" :
             return {
                 ...state,
-                projects: state.projects.filter(p => p.id !== action.payload),
+                tasks: state.tasks.filter(t => t.id !== action.payload.id),
                 loading: false,
                 errors: null,
             };
@@ -74,62 +74,72 @@ function projectReducer(state, action) {
                 ...state,
                 errors: null,
             };
+    
         default:
             return state;
     }
 }
 
-export function ProjectContextProvider({children}) {
-    const [project, dispatchProjectAction] = useReducer(projectReducer, initialState);
+export function TaskContextProvider({children}) {
+    const [task, dispatchTaskAction] = useReducer(taskReducer, initialState);
 
-    const fetchProjects = async (page = 1) => {
-        dispatchProjectAction({ type: "SET_LOADING"});
+    const fetchTasks = async (page = 1) => {
+        dispatchTaskAction({ type: "SET_LOADING"});
 
         try {
-            const res = await api.getProjects(page);
+            const res = await api.getTasks(page);
 
-            dispatchProjectAction({
-                type: "SET_PROJECTS",
+            dispatchTaskAction({
+                type: "SET_TASKS",
                 payload: res.data,
             });
 
             return { success: true };
         } catch (e) {
-            console.log(e);
-            dispatchProjectAction({
-               type: "SET_ERROR",
-               payload: "Failed to fetch projects.", 
+            const message = 
+            e.response?.data?.message ||
+            "Failed to fetch tasks.";
+
+            dispatchTaskAction({
+                type: "SET_ERROR",
+                payload: message,
             });
+
+            return { success: false , message: message };
         }
     }
 
-    const createProject = async (data) => {
-        dispatchProjectAction({ type: "SET_LOADING" });
+    const createTask = async (data) => {
+        dispatchTaskAction({
+            type: "SET_LOADING",
+        });
 
         try {
             await csrf();
             const res = await api.store(data);
 
-            dispatchProjectAction({
+            dispatchTaskAction({
                 type: "SET_LOADING_DONE",
             });
-            dispatchProjectAction({
+            dispatchTaskAction({
                 type: "CLEAR_ERRORS",
             });
 
-            return { success: true,
-                     projects: res.data.projects,
-            };
+            return {
+                success: true,
+                tasks: res.data.tasks,
+            }
         } catch (e) {
             const message = 
             e.response?.data?.message ||
-            "Failed to create project.";
+            "Failed to create task.";
 
-            dispatchProjectAction({
+            dispatchTaskAction({
                 type: "SET_ERROR",
                 payload: message,
             });
-            dispatchProjectAction({
+
+            dispatchTaskAction({
                 type: "SET_LOADING_DONE",
             });
 
@@ -137,55 +147,55 @@ export function ProjectContextProvider({children}) {
         }
     }
 
-    const updateProject = async (id, data) => {
-        dispatchProjectAction({
+    const updateTask = async (id, data) => {
+        dispatchTaskAction({
             type: "SET_LOADING",
         });
 
         try {
             await csrf();
-            const res = await api.updateProject(id, data);
+            const res = await api.updateTask(id, data);
 
-            dispatchProjectAction({
+            dispatchTaskAction({
                 type: "UPDATE",
                 payload: res.data,
             });
-
-            dispatchProjectAction({
+            dispatchTaskAction({
                 type: "SET_LOADING_DONE",
             });
 
-            return { success: true,
-                project: res.data.project,
+            return {
+                success: true,
+                task: res.data.task,
             };
         } catch (e) {
             const message = 
             e.response?.data?.message ||
-            "Failed to update project.";
+            "Failed to update task.";
 
-            dispatchProjectAction({
+            dispatchTaskAction({
                 type: "SET_ERROR",
                 payload: message,
             });
 
-            dispatchProjectAction({
+            dispatchTaskAction({
                 type: "SET_LOADING_DONE",
             });
 
-            return { success: false, message: message }
+            return { success: false, message: message };
         }
     }
 
-    const deleteProject = async (id) => {
-        dispatchProjectAction({
+    const deleteTask = async (id) => {
+        dispatchTaskAction({
             type: "SET_LOADING",
         });
 
         try {
             await csrf();
-            await api.deleteProject(id);
+            await api.deleteTask(id);
 
-            dispatchProjectAction({
+            dispatchTaskAction({
                 type: "DELETE",
                 payload: id,
             });
@@ -194,29 +204,28 @@ export function ProjectContextProvider({children}) {
         } catch (e) {
             const message = 
             e.response?.data?.message ||
-            "Failed to delete project.";
-            dispatchProjectAction({
+            "Failed to delete task.";
+            
+            dispatchTaskAction({
                 type: "SET_ERROR",
                 payload: message,
             });
 
             return { success: false };
-        }        
+        }
     }
 
-    const projectContext = {
-        ...project,
-        fetchProjects,
-        createProject,
-        updateProject,
-        deleteProject,
-    }
+    const taskContext = {
+        ...task,
+        fetchTasks,
+        createTask,
+        updateTask,
+        deleteTask,
+    };
 
     return (
-        <ProjectContext.Provider value={projectContext}>
+        <TaskContext.Provider value={taskContext}>
             {children}
-        </ProjectContext.Provider>
-    )
+        </TaskContext.Provider>
+    );
 }
-
-export default ProjectContext;
