@@ -68,8 +68,8 @@ Route::prefix("task")->group(function() {
     Route::get("/edit/{id}", [TaskController::class, 'edit']);
     Route::put("/update/{id}", [TaskController::class, "update"]);
     Route::delete("/delete/{id}", [TaskController::class, "destroy"]);
-
+    Route::get("/status/{status}", [TaskController::class, "filterByStatus"]);
     Route::post("/{task}/assign", [TaskController::class, "assignToSelf"]);
     Route::post("/{task}/complete", [TaskController::class, "complete"]);
     Route::get("/status/{status}", [TaskController::class, "filterByStatus"]);
-});
+})->middleware("auth:sanctum");
