@@ -13,18 +13,22 @@ class Status extends Model
         'name'
     ];
 
-    public static function open(): self
-    {
-        return static::where('name', 'open')->firstOrFail();
+    public function tasks() {
+        return $this->hasMany(Task::class);
     }
 
-    public static function inProgress(): self
-    {
-        return static::where('name', 'in_progress')->firstOrFail();
-    }
+    // public static function open(): self
+    // {
+    //     return static::where('name', 'open')->firstOrFail();
+    // }
 
-    public static function completed(): self
-    {
-        return static::where('name', 'completed')->firstOrFail();
-    }
+    // public static function inProgress(): self
+    // {
+    //     return static::where('name', 'in_progress')->firstOrFail();
+    // }
+
+    // public static function completed(): self
+    // {
+    //     return static::where('name', 'completed')->firstOrFail();
+    // }
 }

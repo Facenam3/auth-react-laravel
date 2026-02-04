@@ -61,7 +61,7 @@ class TaskController extends Controller
     }
 
     public function allTasks() {
-        $tasks = Task::with(['user', 'status', 'categories', 'projects'])->paginate(10);
+        $tasks = Task::with(['creator', 'assignee', 'completor', 'status', 'category', 'project'])->paginate(10);
 
         return response()->json(data: [
             'tasks' => $tasks,

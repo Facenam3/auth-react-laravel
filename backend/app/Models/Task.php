@@ -25,11 +25,11 @@ class Task extends Model
         'status_id',
     ];
 
-    public function projects() {
+    public function project() {
         return $this->belongsTo(Project::class);
     }
 
-    public function categories() {
+    public function category() {
         return $this->belongsTo(Category::class);
     }
 
@@ -49,15 +49,15 @@ class Task extends Model
         return $this->belongsTo(Status::class);
     }
 
-    public function isOpen(): bool {
-        return $this->status->name === "open";
-    }
+    // public function isOpen(): bool {
+    //     return $this->status->name === "open";
+    // }
 
-    public function isInProgress(): bool {
-        return $this->status->name === "in_progress";
-    }
+    // public function isInProgress(): bool {
+    //     return $this->status->name === "in_progress";
+    // }
 
-    public function isCompleted(): bool {
-        return $this->status->name === "completed";
-    }
+    // public function isCompleted(): bool {
+    //     return $this->status->name === "completed";
+    // }
 }
