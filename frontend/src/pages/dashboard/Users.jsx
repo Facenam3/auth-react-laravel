@@ -33,19 +33,22 @@ export default function Users() {
                     <table className="w-full text-md text-left table-fixed rounded-md">
                         <thead className="capitalize bg-slate-900 ">
                             <tr >
-                                <th className="px-3 py-2">
+                                <th className="px-2 py-2">
+                                    #
+                                </th>
+                                <th className="px-2 py-2">
                                     full name
                                 </th>
-                                <th className="px-3 py-2">
+                                <th className="px-2 py-2">
                                     email
                                 </th>
-                                <th className="px-3 py-2">
+                                <th className="px-2 py-2">
                                     country
                                 </th>
-                                <th className="px-3 py-2">
+                                <th className="px-2 py-2">
                                     phone
                                 </th>
-                                <th className="px-3 py-2">
+                                <th className="px-2 py-2">
                                     actions
                                 </th>
                             </tr>    
@@ -54,24 +57,27 @@ export default function Users() {
                                 {
                                     usersList.map((user) => (
                                         <tr key={user.id} className="border-b-2 border-amber-50">
-                                        <td className="px-3 py-2">
-                                            {user.name}
-                                        </td>
-                                        <td className="px-3 py-2">
-                                            {user.email}
-                                        </td>
-                                        <td className="px-3 py-2">
-                                            {user.country}
-                                        </td>
-                                        <td className="px-3 py-2">
-                                            {user.phone}
-                                        </td>
-                                        <td className="px-3 py-2">
-                                            <span className="mr-2">show</span>
-                                            <span className="mr-2">edit</span>
-                                            <span className="mr-2">delete</span>
-                                        </td>
-                                    </tr>
+                                            <td className="px-2 py-2">
+                                                {user.id}
+                                            </td>
+                                            <td className="px-2 py-2">
+                                                {user.name}
+                                            </td>
+                                            <td className="px-2 py-2">
+                                                {user.email}
+                                            </td>
+                                            <td className="px-2 py-2">
+                                                {user.country}
+                                            </td>
+                                            <td className="px-2 py-2">
+                                                {user.phone}
+                                            </td>
+                                            <td className="px-2 py-2">
+                                                <span className="mr-2">show</span>
+                                                <span className="mr-2">edit</span>
+                                                <span className="mr-2">delete</span>
+                                            </td>
+                                        </tr>
                                     ))
                                 }     
                         </tbody>

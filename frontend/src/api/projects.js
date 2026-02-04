@@ -5,11 +5,11 @@ export const getProjects = (page = 1) => {
 }
 
 export const store = async (data) => {
-    return api.get(`/project/store`, data);
+    return api.post(`/project/store`, data);
 }
 
 export const updateProject = async (id, data) => {
-    return api.get(`/project/update/${id}`, {id, data});
+    return api.post(`/project/update/${id}`, {id, data});
 }
 
 export const showProject = async (id) => {
@@ -17,10 +17,10 @@ export const showProject = async (id) => {
 }
 
 export const deleteProject = (id) => {
-    return api.get(`/project/delete/${id}`);
+    return api.post(`/project/delete/${id}`);
 }
 
 export const getByStatus = (status) => {
-    return api.get(`/project/status/${status}`);
+    return api.post(`/project/status/${status}`);
 }
 
