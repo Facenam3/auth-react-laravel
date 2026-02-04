@@ -229,3 +229,5 @@ export function TaskContextProvider({children}) {
         </TaskContext.Provider>
     );
 }
+
+export default TaskContext;

@@ -10,7 +10,7 @@ export default function Projects() {
 
     useEffect(() => {
         fetchProjects();
-    }, []);
+    }, [fetchProjects]);
 
     const projectList = projects?.data?.data ?? [];
 
@@ -27,7 +27,7 @@ export default function Projects() {
                     <h1 className="font-bold text-xl">Users</h1>
                     <form action="">
                         <input className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" type="search" name="search" id="search" placeholder="Search"/>
-                        <input className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-1 border-gray-50" type="submit" value="Search" />    
+                        <input className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" type="submit" value="Search" />    
                     </form>                    
                 </div>
                 <div className="body overflow-hidden rounded-xl border border-white/30">
