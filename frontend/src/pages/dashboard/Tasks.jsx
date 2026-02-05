@@ -97,11 +97,13 @@ export default function Tasks() {
                         </table>
                     </div>
                     <div className="footer mt-2">
+                        {tasks.data.last_page > 1 && (
                         <PagePagination 
-                        currentPage={tasks.data.current_page}
-                        lastPage={tasks.data.last_page}
-                        onPageChange={fetchTasks}
+                            currentPage={tasks.data.current_page}
+                            lastPage={tasks.data.last_page}
+                            onPageChange={fetchTasks}
                         />
+                        )}
                     </div>
                 </GlassmorphicCard>
             </div>
