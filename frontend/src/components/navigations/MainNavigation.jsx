@@ -17,41 +17,41 @@ export default function MainNavigation() {
         <header className="p-3 bg-gray-950 text-red-400 border-b border-white/30 shadow-amber-200">
             <div className="flex justify-between items- container mx-auto">
                 <div>
-                <NavLink to="/" className="hover:text-red-600 shadow-md">
-                    Logo
-                </NavLink>
-            </div>
-            <ul className="flex items-center gap-3"> 
-                {!isAuthenticated && (
-                    <li>
-                        <NavLink to="/" end className={({isActive}) => { 
-                            return isActive ? linkActive : "";
-                         } }>Home</NavLink>
-                    </li> 
-                )}
-                {!isAuthenticated && (
-                    <li>
-                        <NavLink to="/register" end className={({isActive}) => ( isActive ? linkActive : "" )}>Register</NavLink>
-                    </li>
-                )}
-                {isAuthenticated && (
-                    <li>
-                        <NavLink to="/dashboard" end className={({isActive}) => ( isActive ? linkActive : "" )}>
-                            Dashboard
-                        </NavLink>
-                    </li>
-                )}           
-                
-                {
-                    isAuthenticated ?  
-                     <li>
-                        <button className="hover:text-red-600 shadow-md cursor-pointer" onClick={handleLogout}>Logout</button>
-                    </li> :
-                    <li>
-                        <NavLink to="/login" end className={({isActive}) => ( isActive ? linkActive : "" )} >Login</NavLink>
-                    </li>                    
-                }
-            </ul>
+                    <NavLink to="/" className="hover:text-red-600 shadow-md">
+                        Logo
+                    </NavLink>
+                </div>
+                <ul className="flex items-center gap-3"> 
+                    {!isAuthenticated && (
+                        <li>
+                            <NavLink to="/" end className={({isActive}) => { 
+                                return isActive ? linkActive : "";
+                            } }>Home</NavLink>
+                        </li> 
+                    )}
+                    {!isAuthenticated && (
+                        <li>
+                            <NavLink to="/register" end className={({isActive}) => ( isActive ? linkActive : "" )}>Register</NavLink>
+                        </li>
+                    )}
+                    {isAuthenticated && (
+                        <li>
+                            <NavLink to="/dashboard" end className={({isActive}) => ( isActive ? linkActive : "" )}>
+                                Dashboard
+                            </NavLink>
+                        </li>
+                    )}           
+                    
+                    {
+                        isAuthenticated ?  
+                        <li>
+                            <button className="hover:text-red-600 shadow-md cursor-pointer" onClick={handleLogout}>Logout</button>
+                        </li> :
+                        <li>
+                            <NavLink to="/login" end className={({isActive}) => ( isActive ? linkActive : "" )} >Login</NavLink>
+                        </li>                    
+                    }
+                </ul>
             </div>
             
         </header>
