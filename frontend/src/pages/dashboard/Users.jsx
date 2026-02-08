@@ -4,6 +4,9 @@ import UserContext from "../../store/contexts/UserContext.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
 import PagePagination from "../../components/UI/PagePagination.jsx";
 import LoadingPage from "../../components/UI/Loading.jsx";
+import Table from "../../components/UI/table/Table.jsx";
+import TableRow from "../../components/UI/table/TableRow.jsx";
+import TableItem from "../../components/UI/table/TableItem.jsx";
 
 export default function Users() {
     const { users, loading, fetchUsers } = useContext(UserContext);
@@ -29,60 +32,26 @@ export default function Users() {
                         <input className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" type="submit" value="Search" />    
                     </form>                    
                 </div>
-                <div className="body overflow-hidden rounded-xl border border-white/30">
-                    <table className="w-full text-md text-left table-fixed rounded-md">
-                        <thead className="capitalize bg-slate-900 ">
-                            <tr >
-                                <th className="px-2 py-2">
-                                    #
-                                </th>
-                                <th className="px-2 py-2">
-                                    full name
-                                </th>
-                                <th className="px-2 py-2">
-                                    email
-                                </th>
-                                <th className="px-2 py-2">
-                                    country
-                                </th>
-                                <th className="px-2 py-2">
-                                    phone
-                                </th>
-                                <th className="px-2 py-2">
-                                    actions
-                                </th>
-                            </tr>    
-                        </thead> 
-                        <tbody className="mt-2 bg-amber-100/15">
-                                {
-                                    usersList.map((user) => (
-                                        <tr key={user.id} className="border-b-2 border-amber-50">
-                                            <td className="px-2 py-2">
-                                                {user.id}
-                                            </td>
-                                            <td className="px-2 py-2">
-                                                {user.name}
-                                            </td>
-                                            <td className="px-2 py-2">
-                                                {user.email}
-                                            </td>
-                                            <td className="px-2 py-2">
-                                                {user.country}
-                                            </td>
-                                            <td className="px-2 py-2">
-                                                {user.phone}
-                                            </td>
-                                            <td className="px-2 py-2">
-                                                <span className="mr-2">show</span>
-                                                <span className="mr-2">edit</span>
-                                                <span className="mr-2">delete</span>
-                                            </td>
-                                        </tr>
-                                    ))
-                                }     
-                        </tbody>
-                    </table>
-                </div>
+                <Table 
+                    option="#"
+                    option1="full name"
+                    option2="email"
+                    option3="country"
+                    option4="phone"
+                >   
+                {
+                    usersList.map((user) => (
+                        <TableRow itemKey={user.id}>
+                            <TableItem>{user.id}</TableItem>
+                            <TableItem>{user.name}</TableItem>
+                            <TableItem>{user.email}</TableItem>
+                            <TableItem>{user.country}</TableItem>
+                            <TableItem>{user.phone}</TableItem>
+                        </TableRow>
+                    ))
+                }
+
+                </Table>
                 <div className="footer mt-2">
                     <PagePagination 
                     currentPage={users.data.current_page}

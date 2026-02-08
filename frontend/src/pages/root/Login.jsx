@@ -4,8 +4,9 @@ import AuthContext from "../../store/contexts/AuthContext.jsx";
 import { validateLogin } from "../../validators/auth.js";
 
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
-import InputGroup from "../../components/UI/Input.jsx";
-import ButtonSubmit from "../../components/UI/ButtonSubmit.jsx";
+import InputGroup from "../../components/UI/form/Input.jsx";
+import ButtonSubmit from "../../components/UI/form/ButtonSubmit.jsx";
+import FormInput from "../../components/UI/form/FormInput.jsx";
 
 export default function LoginPage() {
     const authCtx = useContext(AuthContext);
@@ -49,17 +50,16 @@ export default function LoginPage() {
     }
 
     return (
-        <GlassmorphicCard>
-            {
+
+        <FormInput pageName="Login Page" onSubmit={handleLoginSubmit} >
+              {
                 successMsg && (
                     <div className="mb-4 p-2 text-center rounded-md bg-green-500/15 text-green-400 text-sm">
                         {successMsg}
                     </div>
                 )
             }
-            <h1 className="text-center mb-5 font-bold text-3xl text-rose-700">Login Page</h1>
-            <form onSubmit={handleLoginSubmit} className="p-5 text-center rounded-md border-2 border-rose-950">
-                <InputGroup
+            <InputGroup
                     label="Email"
                     type="email"
                     name="email"
@@ -84,7 +84,6 @@ export default function LoginPage() {
                         {authCtx.errors}
                     </div>
                 )}
-            </form>
-        </GlassmorphicCard>
+        </FormInput>
     );
 }
