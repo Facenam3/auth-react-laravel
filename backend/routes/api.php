@@ -65,6 +65,7 @@ Route::prefix("task")->group(function() {
     Route::post("/store", [TaskController::class, 'store']);
     Route::get("/show/{id}", [TaskController::class, 'show']);
     Route::get('/show-all', [TaskController::class, 'allTasks']);
+    Route::get("/open-tasks", [TaskController::class, "openTasks"]);
     Route::get("/edit/{id}", [TaskController::class, 'edit']);
     Route::put("/update/{id}", [TaskController::class, "update"]);
     Route::delete("/delete/{id}", [TaskController::class, "destroy"]);
