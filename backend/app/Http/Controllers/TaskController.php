@@ -69,6 +69,25 @@ class TaskController extends Controller
         ], status: 200);
     }
 
+    public function openTasks() {
+        $tasks = Task::with([
+            'creator', 
+            'assignee', 
+            'completor', 
+            'category', 
+            'project'
+        ])
+        ->whereHas("status", function ($q) {
+            $q->where("name", "open");
+        })
+        ->paginate(10);
+
+        return response()->json(data: [
+            "tasks" => $tasks,
+            "message" => "Showing open tasks.",
+        ], status: 200);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
