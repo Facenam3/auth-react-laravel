@@ -7,13 +7,15 @@ import LoadingPage from "../../components/UI/Loading.jsx";
 import Table from "../../components/UI/table/Table.jsx";
 import TableRow from "../../components/UI/table/TableRow.jsx";
 import TableItem from "../../components/UI/table/TableItem.jsx";
+import ButtonSubmit from "../../components/UI/form/ButtonSubmit.jsx";
+import Button from "../../components/UI/Button.jsx";
 
 export default function Tasks() {
-    const { tasks, loading, fetchTasks } = useContext(TaskContext);
+    const { tasks, loading, fetchOpenTasks } = useContext(TaskContext);
 
     useEffect(() => {
-        fetchTasks();
-    }, [fetchTasks]);
+        fetchOpenTasks();
+    }, [fetchOpenTasks]);
 
     const taskList = tasks?.data?.data ?? [];
 
@@ -34,6 +36,7 @@ export default function Tasks() {
                         </form>                    
                     </div>
                     <Table
+
                         option="#"
                         option1="task name"
                         option2="description"
@@ -41,6 +44,7 @@ export default function Tasks() {
                         option4="status"
                         option5="category"
                         option6="assigned"
+                        task="actions"
                     >
                     {
                         taskList.map((task) => (
@@ -52,6 +56,12 @@ export default function Tasks() {
                                 <TableItem>{task.status.name}</TableItem>
                                 <TableItem>{task.category.name}</TableItem>
                                 <TableItem>{task.assignee?.name ?? "Unassigned"}</TableItem>
+                                <TableItem>
+                                    <Button 
+                                    name="Take Task" 
+                                    type="button"
+                                    />
+                                </TableItem>
                             </TableRow>
                         ))
                     }
@@ -61,7 +71,7 @@ export default function Tasks() {
                         <PagePagination 
                             currentPage={tasks.data.current_page}
                             lastPage={tasks.data.last_page}
-                            onPageChange={fetchTasks}
+                            onPageChange={fetchOpenTasks}
                         />
                         )}
                     </div>

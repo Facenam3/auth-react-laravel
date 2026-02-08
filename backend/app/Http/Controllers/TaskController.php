@@ -75,17 +75,18 @@ class TaskController extends Controller
             'assignee', 
             'completor', 
             'category', 
-            'project'
+            'project',
+            'status',
         ])
         ->whereHas("status", function ($q) {
             $q->where("name", "open");
         })
         ->paginate(10);
 
-        return response()->json(data: [
+        return response()->json([
             "tasks" => $tasks,
             "message" => "Showing open tasks.",
-        ], status: 200);
+        ], 200);
     }
 
     /**
