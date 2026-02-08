@@ -7,6 +7,7 @@ const TaskContext = createContext({
     loading: false,
     errors: null,
     fetchTasks: () => {},
+    fetchOpenTasks: () => {},
     getByStatus: () => {},
     updateTask: () => {},
     deleteTask: () => {},
@@ -97,6 +98,39 @@ export function TaskContextProvider({children}) {
             return { success: true };
         } catch (e) {
             const message = 
+            e.response?.data?.message ||
+            "Failed to fetch tasks.";
+
+            dispatchTaskAction({
+                type: "SET_ERROR",
+                payload: message,
+            });
+
+            return { success: false , message: message };
+        }
+    }
+
+    const fetchOpenTasks = async (page = 1) => {
+        dispatchTaskAction({
+            type: "SET_LOADING",
+        });
+
+        try {
+            const res = await api.getOpenTasks(page);
+
+            dispatchTaskAction({
+                type: "SET_TASKS",
+                payload: res.data,
+            });
+
+            dispatchTaskAction({
+                type: "SET_LOADING_DONE",
+            });
+
+            return {success: true};
+
+        } catch (e) {
+             const message = 
             e.response?.data?.message ||
             "Failed to fetch tasks.";
 
@@ -218,6 +252,7 @@ export function TaskContextProvider({children}) {
     const taskContext = {
         ...task,
         fetchTasks,
+        fetchOpenTasks,
         createTask,
         updateTask,
         deleteTask,

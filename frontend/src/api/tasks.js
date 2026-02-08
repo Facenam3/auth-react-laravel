@@ -4,6 +4,10 @@ export const getTasks = (page = 1) => {
     return api.get(`/task/show-all?page=${page}`);
 } 
 
+export const getOpenTasks = (page = 1) => {
+    return api.get(`/task/open-tasks?page=${page}`);
+}
+
 export const store = async (data) => {
     return api.post("/task/store", data);
 }

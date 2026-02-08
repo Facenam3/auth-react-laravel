@@ -1,4 +1,4 @@
-export default function Table({option, option1, option2, option3, option4, option5, option6, admin, children}) {
+export default function Table({option, option1, option2, option3, option4, option5, option6, task, admin, children}) {
     return (
         <div className="body overflow-hidden rounded-xl border border-white/30">
             <table className="w-full text-md text-left table-fixed rounded-md">
@@ -19,6 +19,11 @@ export default function Table({option, option1, option2, option3, option4, optio
                         <th className="px-2 py-2">
                             {option4}
                         </th>
+                        {task && (
+                            <th className="px-2 py-2">
+                                {task}
+                            </th>
+                        )}
                         {option5 && (<th className="px-2 py-2">
                             {option5}
                         </th>)}
