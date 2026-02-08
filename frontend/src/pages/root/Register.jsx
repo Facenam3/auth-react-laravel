@@ -1,13 +1,14 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
 
-import CountrySelector from "../../components/UI/CountrySelector.jsx";
-import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
-import PhoneSelector from "../../components/UI/PhoneSelector.jsx";
+import CountrySelector from "../../components/UI/form/CountrySelector.jsx";
+import PhoneSelector from "../../components/UI/form/PhoneSelector.jsx";
 import { validateRegister } from "../../validators/register.js";
 import UserContext from "../../store/contexts/UserContext.jsx";
-import InputGroup from "../../components/UI/Input.jsx";
-import ButtonSubmit from "../../components/UI/ButtonSubmit.jsx";
+import InputGroup from "../../components/UI/form/Input.jsx";
+import ButtonSubmit from "../../components/UI/form/ButtonSubmit.jsx";
+import FormInput from "../../components/UI/form/FormInput.jsx";
+import SelectInput from "../../components/UI/form/SelectInput.jsx";
 
 export default function RegisterPage() {
     const userCtx = useContext(UserContext);
@@ -40,74 +41,62 @@ export default function RegisterPage() {
         }
     }
     return (
-        <>
-            <GlassmorphicCard>
-                <h1 className="text-center mb-5 font-bold text-3xl text-rose-700">Register Page</h1>
-                <form onSubmit={handleRegisterSubmit} className="p-5 text-center rounded-md border-2 border-rose-950">
-                    <InputGroup 
-                        label="Full name"
-                        type="text"
-                        name="name"
-                        placeholder="John Doe"
-                        errors={formErrors.name}
-                    />
-                    <InputGroup
-                        label="Email"
-                        type="email"
-                        name="email"
-                        placeholder="JohnDoe@example.com"
-                        errors={formErrors.email}
-                    />
-                    <InputGroup 
-                        label="password"
-                        type="password"
-                        name="password"
-                        placeholder="Password min length is 6 chars."
-                        errors={formErrors.password}
-                    />
-                            
-                    <CountrySelector />
-                    {formErrors.country && (
-                        <p className="text-red-500 text-sm mt-2">{formErrors.country}</p>
-                    )}
-                    <InputGroup 
-                        label="Adress"
-                        type="text"
-                        name="adress"
-                        placeholder="Your home adress."
-                        errors={formErrors.adress}
-                    />
-                    <PhoneSelector />
-                    {formErrors.phone && (
-                        <p className="text-red-500 text-sm mt-2">{formErrors.phone}</p>
-                    )}
-                    <div className="mb-3">
-                        <label htmlFor="gender" className="block mb-3 text-left">Gender</label>
-                        <select 
-                            className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md"  
-                            name="gender" id="gender"
-                            required>
-                            <option selected disabled>Select gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                        {formErrors.gender && (
-                            <p className="text-red-500 text-sm mt-2">{formErrors.gender}</p>
-                        )}
+        <FormInput pageName="Register Page" onSubmit={handleRegisterSubmit}>
+            <InputGroup 
+                    label="Full name"
+                    type="text"
+                    name="name"
+                    placeholder="John Doe"
+                    errors={formErrors.name}
+                />
+                <InputGroup
+                    label="Email"
+                    type="email"
+                    name="email"
+                    placeholder="JohnDoe@example.com"
+                    errors={formErrors.email}
+                />
+                <InputGroup 
+                    label="password"
+                    type="password"
+                    name="password"
+                    placeholder="Password min length is 6 chars."
+                    errors={formErrors.password}
+                />
+                        
+                <CountrySelector />
+                {formErrors.country && (
+                    <p className="text-red-500 text-sm mt-2">{formErrors.country}</p>
+                )}
+                <InputGroup 
+                    label="Adress"
+                    type="text"
+                    name="adress"
+                    placeholder="Your home adress."
+                    errors={formErrors.adress}
+                />
+                <PhoneSelector />
+                {formErrors.phone && (
+                    <p className="text-red-500 text-sm mt-2">{formErrors.phone}</p>
+                )}
+                <SelectInput 
+                    option1="male"
+                    option2="female"
+                    label="gender"
+                    name="gender"
+                    errors={formErrors.gender}
+                />
+                <div className="flex justify-center items-center">
+                    <ButtonSubmit
+                        name="Register"
+                        type="submit"
+                    />                  
+                </div>
+                {userCtx.errors && (
+                    <div className="bg-red-500/10 text-red-400 p-2 rounded mt-3">
+                        {userCtx.errors}
                     </div>
-                    <div className="flex justify-center items-center">
-                        <ButtonSubmit
-                            name="Register"
-                            type="submit"
-                        />                  
-                    </div>
-                    {userCtx.errors && (
-                        <div className="bg-red-500/10 text-red-400 p-2 rounded mt-3">
-                            {userCtx.errors}
-                        </div>
-                    )}
-                </form>
-            </GlassmorphicCard>
-        </>        
+                )}
+        </FormInput> 
     )
 }
