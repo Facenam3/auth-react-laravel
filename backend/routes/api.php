@@ -72,5 +72,11 @@ Route::prefix("task")->group(function() {
     Route::get("/status/{status}", [TaskController::class, "filterByStatus"]);
     Route::post("/{task}/assign", [TaskController::class, "assignToSelf"]);
     Route::post("/{task}/complete", [TaskController::class, "complete"]);
-    Route::get("/status/{status}", [TaskController::class, "filterByStatus"]);
 })->middleware("auth:sanctum");
+
+Route::get('/debug-auth', function (\Illuminate\Http\Request $r) {
+    return response()->json([
+        'authorization_header' => $r->header('Authorization'),
+        'bearer' => $r->bearerToken(),
+    ]);
+});

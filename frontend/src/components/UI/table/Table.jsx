@@ -19,11 +19,6 @@ export default function Table({option, option1, option2, option3, option4, optio
                         <th className="px-2 py-2">
                             {option4}
                         </th>
-                        {task && (
-                            <th className="px-2 py-2">
-                                {task}
-                            </th>
-                        )}
                         {option5 && (<th className="px-2 py-2">
                             {option5}
                         </th>)}
@@ -32,7 +27,12 @@ export default function Table({option, option1, option2, option3, option4, optio
                         </th>)}
                         {admin && (<th className="px-2 py-2">
                             actions
-                        </th>)}
+                        </th>)}                        
+                        {task && (
+                            <th className="px-2 py-2">
+                                {task}
+                            </th>
+                        )}
                     </tr>    
                 </thead> 
                 <tbody className="mt-2 bg-amber-100/15">

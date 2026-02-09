@@ -11,11 +11,19 @@ import ButtonSubmit from "../../components/UI/form/ButtonSubmit.jsx";
 import Button from "../../components/UI/Button.jsx";
 
 export default function Tasks() {
-    const { tasks, loading, fetchOpenTasks } = useContext(TaskContext);
+    const { tasks, loading, fetchOpenTasks, assignTask } = useContext(TaskContext);
 
     useEffect(() => {
         fetchOpenTasks();
     }, [fetchOpenTasks]);
+
+    async function handleAssignTask(id) {
+       const res = await assignTask(id);
+
+       if(!res.success) {
+        console.log(res.message);
+       }
+    }
 
     const taskList = tasks?.data?.data ?? [];
 
@@ -36,7 +44,6 @@ export default function Tasks() {
                         </form>                    
                     </div>
                     <Table
-
                         option="#"
                         option1="task name"
                         option2="description"
@@ -60,6 +67,7 @@ export default function Tasks() {
                                     <Button 
                                     name="Take Task" 
                                     type="button"
+                                    onClick={() => handleAssignTask(task.id)}
                                     />
                                 </TableItem>
                             </TableRow>

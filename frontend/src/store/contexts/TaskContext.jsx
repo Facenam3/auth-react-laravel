@@ -9,6 +9,7 @@ const TaskContext = createContext({
     fetchTasks: () => {},
     fetchOpenTasks: () => {},
     getByStatus: () => {},
+    assignTask: () => {},
     updateTask: () => {},
     deleteTask: () => {},
 });
@@ -30,11 +31,6 @@ function taskReducer(state, action) {
                 ...state,
                 loading: true,
             };
-        case "SET_LOADING_DONE":
-            return {
-                ...state,
-                loading: false,
-            };
         case "SET_ERROR":
             return {
                 ...state,
@@ -52,21 +48,27 @@ function taskReducer(state, action) {
                 loading: false,
                 errors: null,
             };
-        case "UPDATE":
-            const idx = state.tasks.findIndex(task => task.id === action.payload.id);
-            if(idx === -1) return state;
-            const updatedTasks = [...state.tasks];
-            updatedTasks[idx] = {...updatedTasks[idx], ...action.payload.id};
+        case "TASK_UPDATE": {
+                const updated = action.payload;
+                return {
+                    ...state,
+                    tasks: {
+                    ...state.tasks,
+                    data: Array.isArray(state.tasks?.data)
+                        ? state.tasks.data.map(t => (t.id === updated.id ? updated : t))
+                        : [updated], 
+                    },
+                };
+                }
+        case "TASK_DELETE" :
             return {
                 ...state,
-                tasks: updatedTasks,
-                loading: false,
-                errors: null,
-            };
-        case "DELETE" :
-            return {
-                ...state,
-                tasks: state.tasks.filter(t => t.id !== action.payload.id),
+                tasks: {
+                    ...state.tasks,
+                    data: state.tasks.data.filter(
+                        task => task.id !== action.payload
+                    ),
+                },
                 loading: false,
                 errors: null,
             };
@@ -123,10 +125,6 @@ export function TaskContextProvider({children}) {
                 payload: res.data,
             });
 
-            dispatchTaskAction({
-                type: "SET_LOADING_DONE",
-            });
-
             return {success: true};
 
         } catch (e) {
@@ -149,12 +147,8 @@ export function TaskContextProvider({children}) {
         });
 
         try {
-            await csrf();
             const res = await api.store(data);
 
-            dispatchTaskAction({
-                type: "SET_LOADING_DONE",
-            });
             dispatchTaskAction({
                 type: "CLEAR_ERRORS",
             });
@@ -173,8 +167,34 @@ export function TaskContextProvider({children}) {
                 payload: message,
             });
 
+            return { success: false, message: message };
+        }
+    }
+
+    const assignTask = async (id) => {
+        try {
+            const res = await api.assignTask(id);
+
             dispatchTaskAction({
-                type: "SET_LOADING_DONE",
+                type: "TASK_UPDATE",
+                payload: res.data.task,
+            });
+
+            await fetchOpenTasks();
+
+            return { 
+                success: true, 
+                message: "Task assigned to you successfully." 
+            };
+
+        } catch (e) {
+            const message = 
+            e.response?.data?.message ||
+            "Failed to update task.";
+
+            dispatchTaskAction({
+                type: "SET_ERROR",
+                payload: message,
             });
 
             return { success: false, message: message };
@@ -191,11 +211,8 @@ export function TaskContextProvider({children}) {
             const res = await api.updateTask(id, data);
 
             dispatchTaskAction({
-                type: "UPDATE",
+                type: "TASK_UPDATE",
                 payload: res.data,
-            });
-            dispatchTaskAction({
-                type: "SET_LOADING_DONE",
             });
 
             return {
@@ -212,10 +229,6 @@ export function TaskContextProvider({children}) {
                 payload: message,
             });
 
-            dispatchTaskAction({
-                type: "SET_LOADING_DONE",
-            });
-
             return { success: false, message: message };
         }
     }
@@ -230,7 +243,7 @@ export function TaskContextProvider({children}) {
             await api.deleteTask(id);
 
             dispatchTaskAction({
-                type: "DELETE",
+                type: "TASK_DELETE",
                 payload: id,
             });
 
@@ -254,6 +267,7 @@ export function TaskContextProvider({children}) {
         fetchTasks,
         fetchOpenTasks,
         createTask,
+        assignTask,
         updateTask,
         deleteTask,
     };
