@@ -36,7 +36,6 @@ export default function Tasks() {
                         </form>                    
                     </div>
                     <Table
-
                         option="#"
                         option1="task name"
                         option2="description"
