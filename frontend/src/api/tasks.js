@@ -8,6 +8,10 @@ export const getOpenTasks = (page = 1) => {
     return api.get(`/task/open-tasks?page=${page}`);
 }
 
+export const assignTask = (taskId) => {
+    return api.post(`/task/${taskId}/assign`, {taskId});
+}
+
 export const store = async (data) => {
     return api.post("/task/store", data);
 }

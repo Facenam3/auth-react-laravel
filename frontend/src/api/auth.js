@@ -27,3 +27,7 @@ export const deleteUser = async (id) => {
 export const getUser = () => {
     return api.get("/user");
 }
+
+export const debugging = () => {
+    return api.get("/debug-auth").then(res => console.log(res.data));
+}

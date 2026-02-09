@@ -125,18 +125,20 @@ class TaskController extends Controller
     }
 
     public function assignToSelf(Task $task, Request $request) {
+        $user = auth("sanctum")->user();
+
         if($task->assigned_to) {
             return response()->json(["message" => "Task already assigned!"], 409);
         }
 
-        if($task->status->name !== "open") {
+        if(!$task->status || $task->status->name !== "open") {
             return response()->json(["message" => "Task is not open"], 409);
         }
 
         $status = Status::where("name", "in_progress")->firstOrFail();
 
         $task->update([
-            "assigned_to" => $request->user()->id,
+            "assigned_to" => $user->id,
             "status_id" => $status->id,
         ]);
         
