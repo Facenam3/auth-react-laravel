@@ -3,7 +3,7 @@ import {
     getUsers as getUsers, 
     register as apiRegister,
     update as apiUpdate,
-    deleteUser as apiDelete
+    deleteUser as apiDelete,
 } from "../../api/auth";
 
 
@@ -34,11 +34,6 @@ function userReducer(state, action) {
                 ...state, 
                 loading: true
             };
-        case "SET_LOADING_DONE":
-            return {
-                ...state,
-                loading: false,
-            }
         case "SET_ERROR": 
             return { 
                 ...state, 
@@ -56,22 +51,30 @@ function userReducer(state, action) {
                 loading: false, 
                 errors: null 
             };
-        case "UPDATE":
-            const idx = state.users.findIndex(user => user.id === action.payload.id);
-            if (idx === -1) return state;
-            const updatedUsers = [...state.users];
-            updatedUsers[idx] = {...updatedUsers[idx], ...action.payload};
+        case "UPDATE_USER":
+            {
+                const updated = action.payload;
+                return {
+                    ...state, 
+                    users: {
+                        ...state.users,
+                        data: Array.isArray(state.users?.data)
+                        ? state.users.data.map(u => (u.id === updated.id ? updated : u))
+                        : [updated],
+                    },
+                };
+            }
+        case "DELETE_USER":
             return { 
                 ...state, 
-                users: updatedUsers, 
+                users: {
+                    ...state.users,
+                    data: state.users.data.filter(
+                        u => u.id !== action.payload
+                    ),
+                }, 
                 loading: false, 
-                errors: null
-            };
-        case "DELETE":
-            return { 
-                ...state, 
-                users: state.users.filter(u => u.id !== action.payload), 
-                loading: false, errors: false 
+                errors: null, 
             };
         case "CLEAR_ERRORS":
             return {
@@ -97,8 +100,6 @@ export function UserContextProvider({children}) {
                 payload: res.data
             });
 
-            dispatchUserAction({ type: "SET_LOADING_DONE" });
-
             return { success: true };
         } catch (e) {
             const message = 
@@ -114,9 +115,6 @@ export function UserContextProvider({children}) {
         dispatchUserAction({ type: "SET_LOADING" });
         try {
             const res = await apiRegister(data);
-            
-            dispatchUserAction({ type: "SET_LOADING", payload: false });
-            dispatchUserAction({ type: "SET_ERROR", payload: null });
 
             return {
                 success: true, 
@@ -129,18 +127,26 @@ export function UserContextProvider({children}) {
             "Failed to register user.";
 
             dispatchUserAction({ type: "SET_ERROR", payload: message });
-            dispatchUserAction({ type: "SET_LOADING", payload: false });  
-            
+   
             return {success: false};
         }
     }
 
-    const update = async (id, data) => {
+    const update = async (id) => {
         dispatchUserAction({ type: "SET_LOADING" });
 
         try {
-            const res = await apiUpdate(id, data);
-            dispatchUserAction({ type: "UPDATE", payload: res.data });
+            const res = await apiUpdate(id);
+
+            dispatchUserAction({ 
+                type: "UPDATE_USER",
+                payload: res.data.user,
+            });
+
+            return {
+                success: true,
+                message: "User updated successfully.",
+            };
         } catch (e) {
             const message = 
             e.response?.data?.message ||
@@ -155,7 +161,7 @@ export function UserContextProvider({children}) {
 
         try {
             await apiDelete(id);
-            dispatchUserAction({ type: "DELETE", payload: id });
+            dispatchUserAction({ type: "DELETE_USER", payload: id });
         } catch (e) {
             const message = 
             e.response?.data?.message ||

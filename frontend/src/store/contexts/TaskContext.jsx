@@ -47,7 +47,8 @@ function taskReducer(state, action) {
                 loading: false,
                 errors: null,
             };
-        case "TASK_UPDATE": {
+        case "TASK_UPDATE": 
+            {
                 const updated = action.payload;
                 return {
                     ...state,
@@ -57,8 +58,10 @@ function taskReducer(state, action) {
                         ? state.tasks.data.map(t => (t.id === updated.id ? updated : t))
                         : [updated], 
                     },
+                    loading: false,
+                    errors: null,
                 };
-                }
+            }
         case "TASK_DELETE" :
             return {
                 ...state,
@@ -200,22 +203,23 @@ export function TaskContextProvider({children}) {
         }
     }
 
-    const updateTask = async (id, data) => {
+    const updateTask = async (id) => {
         dispatchTaskAction({
             type: "SET_LOADING",
         });
 
         try {
-            const res = await api.updateTask(id, data);
+            const res = await api.updateTask(id);
 
             dispatchTaskAction({
                 type: "TASK_UPDATE",
-                payload: res.data,
+                payload: res.data.task,
             });
 
             return {
                 success: true,
                 task: res.data.task,
+                message: "Task updated successfully.",
             };
         } catch (e) {
             const message = 
