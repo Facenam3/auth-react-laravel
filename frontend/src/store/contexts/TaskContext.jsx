@@ -1,6 +1,5 @@
 import { createContext, useReducer } from "react";
 import * as api from "../../api/tasks";
-import csrf from "../../api/csrf";
 
 const TaskContext = createContext({
     tasks: [],
@@ -207,7 +206,6 @@ export function TaskContextProvider({children}) {
         });
 
         try {
-            await csrf();
             const res = await api.updateTask(id, data);
 
             dispatchTaskAction({
@@ -239,7 +237,6 @@ export function TaskContextProvider({children}) {
         });
 
         try {
-            await csrf();
             await api.deleteTask(id);
 
             dispatchTaskAction({

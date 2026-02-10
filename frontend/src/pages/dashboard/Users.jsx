@@ -20,8 +20,7 @@ export default function Users() {
     if(loading) {
         return <LoadingPage >Loading users..</LoadingPage>
     };
-
-    console.log(users);
+    
     return (
         <div className="container mx-auto p-10 mt-10">
             <GlassmorphicCard table>

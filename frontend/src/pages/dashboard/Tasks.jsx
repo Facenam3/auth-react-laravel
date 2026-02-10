@@ -31,8 +31,6 @@ export default function Tasks() {
         return <LoadingPage>Loading tasks...</LoadingPage>
     }
 
-    console.log(tasks);
-
     return (
             <div className="container mx-auto p-10 mt-10">
                 <GlassmorphicCard table>

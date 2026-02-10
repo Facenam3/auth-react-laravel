@@ -21,8 +21,6 @@ export default function Projects() {
         return <LoadingPage>Loading projects...</LoadingPage>
     }
 
-    console.log(projects);
-
     return (
         <div className="container mx-auto p-10 mt-10">
             <GlassmorphicCard table>
