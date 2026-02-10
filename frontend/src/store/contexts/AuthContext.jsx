@@ -1,6 +1,5 @@
 import { createContext, useReducer } from "react";
 import {login as loginApi, logout as logoutApi} from "../../api/auth";
-import csrf from "../../api/csrf";
 
 const AuthContext = createContext({
     user: null,
@@ -31,7 +30,6 @@ function authReducer(state, action) {
                 loading: false,
            };
         case "AUTH_ERROR":
-            console.log("REDUCER RECEIVED AUTH_ERROR:", action.payload);
             return {
                 ...state,
                 errors: action.payload,
@@ -64,7 +62,6 @@ export function AuthContextProvider({children}) {
 
        dispatchAuthAction({ type: "SET_LOADING" });
        try {
-        await csrf();
         const res = await loginApi(data);
 
         localStorage.setItem("token", res.data.token);
@@ -77,7 +74,6 @@ export function AuthContextProvider({children}) {
         e.response?.data?.errors?.email?.[0] ||
         "Invalid credentials";
 
-        console.log("DISPATCHING AUTH_ERROR WITH:", message);
         dispatchAuthAction({ type: "AUTH_ERROR" , payload: message});
 
         return { success: false };
@@ -85,11 +81,18 @@ export function AuthContextProvider({children}) {
     }
 
     async function logout() {
-          try {
-        await logoutApi(); 
+        try {
+            await logoutApi(); 
         } catch (e) {
             console.warn("Logout API failed, clearing client state anyway");
-            console.log(e);
+            const message = 
+            e.response?.data?.message ||
+            "Failed to logout user.";
+
+            dispatchAuthAction({
+                type: "SET_ERROR",
+                payload: message,
+            });
         } finally {
             localStorage.removeItem("token");
             dispatchAuthAction({ type: "LOGOUT" });

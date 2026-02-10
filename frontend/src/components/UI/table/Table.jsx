@@ -25,11 +25,6 @@ export default function Table({option, option1, option2, option3, option4, optio
                         {option6 && (<th className="px-2 py-2">
                             {option6}
                         </th>)}
-                        {task && (
-                            <th className="px-2 py-2">
-                                {task}
-                            </th>
-                        )}
                         {admin && (<th className="px-2 py-2">
                             actions
                         </th>)}                        

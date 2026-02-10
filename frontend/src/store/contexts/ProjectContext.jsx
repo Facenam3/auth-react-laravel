@@ -1,6 +1,5 @@
 import { createContext, useReducer } from "react";
 import * as api from "../../api/projects";
-import csrf from "../../api/csrf";
 
 const ProjectContext = createContext({
     projects: [],
@@ -95,10 +94,13 @@ export function ProjectContextProvider({children}) {
 
             return { success: true };
         } catch (e) {
-            console.log(e);
+            const message = 
+            e.response?.data?.message ||
+            "Failed to register projects.";
+            
             dispatchProjectAction({
                type: "SET_ERROR",
-               payload: "Failed to fetch projects.", 
+               payload: message, 
             });
         }
     }
@@ -107,7 +109,6 @@ export function ProjectContextProvider({children}) {
         dispatchProjectAction({ type: "SET_LOADING" });
 
         try {
-            await csrf();
             const res = await api.store(data);
 
             dispatchProjectAction({
@@ -143,7 +144,6 @@ export function ProjectContextProvider({children}) {
         });
 
         try {
-            await csrf();
             const res = await api.updateProject(id, data);
 
             dispatchProjectAction({
@@ -182,7 +182,6 @@ export function ProjectContextProvider({children}) {
         });
 
         try {
-            await csrf();
             await api.deleteProject(id);
 
             dispatchProjectAction({

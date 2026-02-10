@@ -5,7 +5,6 @@ import {
     update as apiUpdate,
     deleteUser as apiDelete
 } from "../../api/auth";
-import csrf from "../../api/csrf";
 
 
 const UserContext = createContext({
@@ -102,8 +101,10 @@ export function UserContextProvider({children}) {
 
             return { success: true };
         } catch (e) {
-            console.log(e);
-            dispatchUserAction({type: "SET_ERROR", payload: "Failed to fetch users"});
+            const message = 
+            e.response?.data?.message ||
+            "Failed to fetch users.";
+            dispatchUserAction({type: "SET_ERROR", payload: message});
 
             return {success: false};
         }
@@ -112,7 +113,6 @@ export function UserContextProvider({children}) {
     const register = async (data) => {
         dispatchUserAction({ type: "SET_LOADING" });
         try {
-            await csrf();
             const res = await apiRegister(data);
             
             dispatchUserAction({ type: "SET_LOADING", payload: false });
@@ -142,8 +142,11 @@ export function UserContextProvider({children}) {
             const res = await apiUpdate(id, data);
             dispatchUserAction({ type: "UPDATE", payload: res.data });
         } catch (e) {
-            console.log(e);
-            dispatchUserAction({ type: "SET_ERROR", payload: "Failed to update user."});
+            const message = 
+            e.response?.data?.message ||
+            "Failed to update user.";
+
+            dispatchUserAction({ type: "SET_ERROR", payload: message});
         }
     }
 
@@ -154,8 +157,10 @@ export function UserContextProvider({children}) {
             await apiDelete(id);
             dispatchUserAction({ type: "DELETE", payload: id });
         } catch (e) {
-            console.log(e);
-            dispatchUserAction({ type: "SET_ERROR", payload: "Failed to delete user."});
+            const message = 
+            e.response?.data?.message ||
+            "Failed to delete user.";
+            dispatchUserAction({ type: "SET_ERROR", payload: message});
         }
     }
 

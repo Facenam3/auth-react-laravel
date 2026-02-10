@@ -30,8 +30,6 @@ export default function LoginPage() {
         }
     }, [authCtx.isAuthenticated, navigate]);
 
-    console.log(authCtx.errors);
-
     async function handleLoginSubmit(event) {
         event.preventDefault();
 
