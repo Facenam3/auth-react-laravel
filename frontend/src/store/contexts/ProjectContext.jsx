@@ -28,11 +28,6 @@ function projectReducer(state, action) {
                 ...state,
                 loading: true,
             };
-        case "SET_LOADING_DONE":
-            return {
-                ...state,
-                loading: false,
-            };
         case "SET_ERROR":
             return {
                 ...state,
@@ -50,21 +45,30 @@ function projectReducer(state, action) {
                 loading: false,
                 errors: null,
             };
-        case "UPDATE":
-            const idx = state.projects.findIndex(project => project.id === action.payload.id);
-            if (idx === -1) return state;
-            const updatedProjects = [...state.projects];
-            updatedProjects[idx] = {...updatedProjects[idx], ...action.payload};
+        case "UPDATE_PROJECT":
+           { 
+            const updated = action.payload;
             return {
                 ...state,
-                projects: updatedProjects,
+                projects: {
+                    ...state.projects,
+                    data: Array.isArray(state.projects?.data) 
+                    ? state.projects.data.map(p => (p.id === updated.id ? updated : p))
+                    : [updated],
+                },
                 loading: false,
                 errors: null,
             };
-        case "DELETE" :
+        }
+        case "DELETE_PROJECT" :
             return {
                 ...state,
-                projects: state.projects.filter(p => p.id !== action.payload),
+                projects: {
+                    ...state,
+                    data: state.projects.data.filter(
+                        p => p.id !== action.payload
+                    ),
+                },
                 loading: false,
                 errors: null,
             };
@@ -112,9 +116,6 @@ export function ProjectContextProvider({children}) {
             const res = await api.store(data);
 
             dispatchProjectAction({
-                type: "SET_LOADING_DONE",
-            });
-            dispatchProjectAction({
                 type: "CLEAR_ERRORS",
             });
 
@@ -130,33 +131,28 @@ export function ProjectContextProvider({children}) {
                 type: "SET_ERROR",
                 payload: message,
             });
-            dispatchProjectAction({
-                type: "SET_LOADING_DONE",
-            });
 
             return { success: false, message: message };
         }
     }
 
-    const updateProject = async (id, data) => {
+    const updateProject = async (id) => {
         dispatchProjectAction({
             type: "SET_LOADING",
         });
 
         try {
-            const res = await api.updateProject(id, data);
+            const res = await api.updateProject(id);
 
             dispatchProjectAction({
-                type: "UPDATE",
-                payload: res.data,
+                type: "UPDATE_PROJECT",
+                payload: res.data.project,
             });
 
-            dispatchProjectAction({
-                type: "SET_LOADING_DONE",
-            });
-
-            return { success: true,
+            return { 
+                success: true,
                 project: res.data.project,
+                message: "Project updated successfully.",
             };
         } catch (e) {
             const message = 
@@ -166,10 +162,6 @@ export function ProjectContextProvider({children}) {
             dispatchProjectAction({
                 type: "SET_ERROR",
                 payload: message,
-            });
-
-            dispatchProjectAction({
-                type: "SET_LOADING_DONE",
             });
 
             return { success: false, message: message }

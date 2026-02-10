@@ -17,8 +17,8 @@ export default function MainNavigation() {
         <header className="p-3 bg-gray-950 text-red-400 border-b border-white/30 shadow-amber-200">
             <div className="flex justify-between items- container mx-auto">
                 <div>
-                    <NavLink to="/" className="hover:text-red-600 shadow-md">
-                        Logo
+                    <NavLink to="/" className="hover:text-red-600 shadow-md text-xl font-bold ">
+                        TaskBoard
                     </NavLink>
                 </div>
                 <ul className="flex items-center gap-3"> 
