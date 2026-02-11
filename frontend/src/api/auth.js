@@ -1,7 +1,7 @@
 import api from "./axios";
 
-export const getUsers = (page = 1) => {
-    return api.get(`/users/all?page=${page}`);
+export const getUsers = (search, page = 1) => {
+    return api.get("/users/users",{ params:  {page, search}});
 }
 
 export const login = async (data) => {

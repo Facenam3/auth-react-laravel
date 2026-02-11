@@ -38,8 +38,11 @@ class UserApiController extends Controller
         ]);
     }
 
-    public function getAllUsers() {
-        $users = User::paginate(10);
+    public function getAllUsers(Request $request) {
+        $users = User::query()
+        ->search($request->query("search"))
+        ->orderByDesc("id")
+        ->paginate(10);
 
         return response()->json([
             "users" => $users,
