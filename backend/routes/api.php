@@ -22,7 +22,7 @@ Route::middleware(
 Route::prefix("users")->group(function() {
     Route::patch("/edit/{id}", [UserApiController::class , "editUser"]);
     Route::get("/show/{id}", [UserApiController::class, "showUser"]);
-    Route::get("/all", [UserApiController::class, "getAllUsers"]);
+    Route::get("/users", [UserApiController::class, "getAllUsers"]);
 })->middleware("auth:sanctum");
 
 Route::post("/register", [UserApiController::class, "store"]);

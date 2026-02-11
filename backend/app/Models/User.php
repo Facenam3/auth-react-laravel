@@ -61,4 +61,17 @@ class User extends Authenticatable
     public function projects() {
         return $this->hasMany(Project::class);
     }
+
+    public function scopeSearch($query,?string $term) {
+        $term = trim((string) $term);
+        
+        if($term === "") {
+            return $query;
+        }
+
+        return $query->where(function($q) use ($term){
+            $q->where("name", "like", "%{$term}%")
+            ->orWhere("email", "like", "%{$term}%");
+        });
+    }
 }
