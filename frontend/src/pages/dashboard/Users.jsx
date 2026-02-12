@@ -85,8 +85,8 @@ export default function Users() {
                 </Table>
                 <div className="footer mt-2">
                     <PagePagination 
-                    currentPage={users.data.current_page}
-                    lastPage={users.data.last_page}
+                    currentPage={users?.data?.current_page}
+                    lastPage={users?.data?.last_page}
                     onPageChange={(u) => fetchUsers({page: u, search})}
                     />
                 </div>
