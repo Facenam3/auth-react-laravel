@@ -84,8 +84,8 @@ export default function Projects() {
                 </Table>
                 <div className="footer mt-2">
                     <PagePagination 
-                    currentPage={projects.data.current_page}
-                    lastPage={projects.data.last_page}
+                    currentPage={projects?.data?.current_page}
+                    lastPage={projects?.data?.last_page}
                     onPageChange={(p) => fetchProjects({ page: p, search})}
                     />
                 </div>

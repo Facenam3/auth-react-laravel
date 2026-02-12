@@ -110,7 +110,7 @@ export function ProjectContextProvider({children}) {
         } catch (e) {
             const message = 
             e.response?.data?.message ||
-            "Failed to register projects.";
+            "Failed to fetch projects.";
             
             dispatchProjectAction({
                type: "SET_ERROR",
