@@ -90,14 +90,24 @@ function userReducer(state, action) {
 export function UserContextProvider({children}) {
     const [user, dispatchUserAction] = useReducer(userReducer, initialState);
 
-    const fetchUsers = async ({page = 1, search = ""} = {}) => {
+    const fetchUsers = async (arg = {}, maybeSearch) => {
+        let page = 1;
+        let search = "";
+
+        if(typeof arg === "number"){
+            page = arg;
+            search = typeof maybeSearch === "string" ? maybeSearch : "";
+        } else {
+            ({page = 1, search = ""} = arg || {});
+        }
+
         dispatchUserAction({type: "SET_LOADING"});
         try {
             const res =  await getUsers(search, page);
 
             dispatchUserAction({ 
                 type: "SET_USERS", 
-                payload: res.data
+                payload: res.data,
             });
 
             return { success: true };

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import ProjectContext from "../../store/contexts/ProjectContext.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
@@ -11,9 +11,18 @@ import TableItem from "../../components/UI/table/TableItem.jsx";
 export default function Projects() {
     const { projects, loading, fetchProjects } = useContext(ProjectContext);
 
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+
     useEffect(() => {
-        fetchProjects();
-    }, [fetchProjects]);
+        fetchProjects({page: 1, search: ""});
+    }, [page, fetchProjects]);
+
+    const handleSubmitSearch = (e) => {
+        e.preventDefault();
+        setPage(1);
+        fetchProjects({page, search});
+    }
 
     const projectList = projects?.data?.data ?? [];
 
@@ -26,9 +35,30 @@ export default function Projects() {
             <GlassmorphicCard table>
                 <div className="head flex justify-between items-center p-2 mb-2">
                     <h1 className="font-bold text-xl">Users</h1>
-                    <form action="">
-                        <input className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" type="search" name="search" id="search" placeholder="Search"/>
-                        <input className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" type="submit" value="Search" />    
+                    <form onSubmit={handleSubmitSearch}>
+                        <input 
+                        className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" 
+                        type="search" 
+                        name="search" 
+                        id="search" 
+                        value={search}
+                        placeholder="Search"
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            setSearch(val);
+
+                            if(val === ""){
+                                setPage(1);
+                                fetchProjects({page: 1, search: ""});
+                            }
+                        }}
+                        />
+                        <input 
+                        className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" 
+                        type="submit" 
+                        value="Search"
+                        disabled={!search.trim()}
+                        />    
                     </form>                    
                 </div>
                 <Table 
@@ -41,7 +71,7 @@ export default function Projects() {
                 >
                     {
                         projectList.map((project) => (
-                            <TableRow itemKey={project.id}>
+                            <TableRow itemKey={project.id} key={project.id}>
                                 <TableItem>{project.id}</TableItem>
                                 <TableItem>{project.name}</TableItem>
                                 <TableItem>{project.description.substring(0, 20) + " ..."}</TableItem>
@@ -56,7 +86,7 @@ export default function Projects() {
                     <PagePagination 
                     currentPage={projects.data.current_page}
                     lastPage={projects.data.last_page}
-                    onPageChange={fetchProjects}
+                    onPageChange={(p) => fetchProjects({ page: p, search})}
                     />
                 </div>
             </GlassmorphicCard>

@@ -1,7 +1,7 @@
 import api from "./axios";
 
-export const getProjects = (page = 1) => {
-    return api.get(`/project/show-all?page=${page}`);
+export const getProjects = (search, page) => {
+    return api.get("/project/projects", {params: {search, page}});
 }
 
 export const store = async (data) => {
