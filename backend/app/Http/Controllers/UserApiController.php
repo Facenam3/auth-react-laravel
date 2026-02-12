@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
@@ -38,7 +39,7 @@ class UserApiController extends Controller
         ]);
     }
 
-    public function getAllUsers(Request $request) {
+    public function getAllUsers(SearchUserRequest $request) {
         $users = User::query()
         ->search($request->query("search"))
         ->orderByDesc("id")

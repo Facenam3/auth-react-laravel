@@ -33,4 +33,17 @@ class Project extends Model
     public function status() {
         return $this->belongsTo(Status::class);
     }
+
+    public function scopeSearch($query, ?string $term) {
+        $term = trim((string) $term);
+
+        if($term === "") {
+            return $query;
+        }
+
+        return $query->where(function($q) use ($term){
+            $q->where("name", "like", "%{$term}%")
+            ->orWhere("description", "like", "%{$term}%");
+        });
+    }
 }

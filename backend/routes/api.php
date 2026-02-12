@@ -53,7 +53,7 @@ Route::prefix("category")->group(function() {
 Route::prefix("project")->group(function(){
     Route::post("/store", [ProjectController::class, "store"]);
     Route::get("/show/{id}", [ProjectController::class, 'show']);
-    Route::get("/show-all", [ProjectController::class, 'allProjects']);
+    Route::get("/projects", [ProjectController::class, 'allProjects']);
     Route::get("/edit/{id}", [ProjectController::class, "edit"]);
     Route::get("/status/{status}", [ProjectController::class, "filterByStatus"]);
     Route::put("/update/{id}", [ProjectController::class, "update"]);

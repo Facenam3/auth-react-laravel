@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Project\ProjectRequest;
+use App\Http\Requests\Project\SearchProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Models\Status;
@@ -59,13 +60,18 @@ class ProjectController extends Controller
         ], status: 200);
     }
 
-    public function allProjects() {
-        $projects = Project::with(['user', 'status', 'tasks'])->paginate(10);
+    public function allProjects(SearchProjectRequest $request) {
 
-        return response()->json(data: [
+        $projects = Project::query()
+        ->search($request->query("search"))
+        ->with(['user', 'status', 'tasks'])
+        ->orderByDesc("id")
+        ->paginate(10);
+
+        return response()->json([
             'projects' => $projects,
             'message' => "Showing all projects",
-        ], status: 200);
+        ], 200);
     }
 
     /**
