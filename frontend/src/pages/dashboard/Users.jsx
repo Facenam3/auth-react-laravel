@@ -16,7 +16,7 @@ export default function Users() {
 
     useEffect(() => {
         fetchUsers({page, search});
-    },[page, fetchUsers]);
+    },[ page, search, fetchUsers]);
 
     const usersList = users?.data?.data ?? [];
 
