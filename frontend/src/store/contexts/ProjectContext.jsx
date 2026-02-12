@@ -85,11 +85,21 @@ function projectReducer(state, action) {
 export function ProjectContextProvider({children}) {
     const [project, dispatchProjectAction] = useReducer(projectReducer, initialState);
 
-    const fetchProjects = async (page = 1) => {
+    const fetchProjects = async (arg = {}, maybeSearch) => {
+        let page = 1;
+        let search = "";
+
+        if(typeof arg === "number"){
+            page = arg;
+            search = typeof maybeSearch === "string" ? maybeSearch : "";
+        } else {
+            ({page = 1, search = ""} = arg || {});
+        }
+
         dispatchProjectAction({ type: "SET_LOADING"});
 
         try {
-            const res = await api.getProjects(page);
+            const res = await api.getProjects(search, page);
 
             dispatchProjectAction({
                 type: "SET_PROJECTS",
@@ -106,6 +116,8 @@ export function ProjectContextProvider({children}) {
                type: "SET_ERROR",
                payload: message, 
             });
+
+            return { success: false };
         }
     }
 

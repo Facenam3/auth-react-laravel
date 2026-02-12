@@ -15,16 +15,18 @@ export default function Users() {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        fetchUsers({page, search});
-    },[ page, search, fetchUsers]);
+        fetchUsers({page: 1, search: ""});
+    },[ page, fetchUsers]);
 
     const usersList = users?.data?.data ?? [];
 
     const handleSubmitSearch = (e) => {
         e.preventDefault();
         setPage(1);
-        fetchUsers({ page: 1, search });
+        fetchUsers({ page, search });
     }
+
+    console.log(users);
 
     if(loading) {
         return <LoadingPage >Loading users..</LoadingPage>
@@ -44,13 +46,13 @@ export default function Users() {
                             value={search}
                             placeholder="Search"                            
                             onChange={(e) => {
-                            const val = e.target.value;
-                            setSearch(val);
+                                const val = e.target.value;
+                                setSearch(val);
 
-                            if(val === ""){
-                                setPage(1);
-                                fetchUsers({page: 1, search: ""});
-                            }
+                                if(val === ""){
+                                    setPage(1);
+                                    fetchUsers({page: 1, search: ""});
+                                }
                             }}
                         />
                         <input 
@@ -70,7 +72,7 @@ export default function Users() {
                 >   
                 {
                     usersList.map((user) => (
-                        <TableRow itemKey={user.id}>
+                        <TableRow itemKey={user.id} key={user.id}>
                             <TableItem>{user.id}</TableItem>
                             <TableItem>{user.name}</TableItem>
                             <TableItem>{user.email}</TableItem>
@@ -85,7 +87,7 @@ export default function Users() {
                     <PagePagination 
                     currentPage={users.data.current_page}
                     lastPage={users.data.last_page}
-                    onPageChange={fetchUsers}
+                    onPageChange={(u) => fetchUsers({page: u, search})}
                     />
                 </div>
             </GlassmorphicCard>
