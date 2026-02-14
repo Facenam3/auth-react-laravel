@@ -26,8 +26,6 @@ export default function Users() {
         fetchUsers({ page, search });
     }
 
-    console.log(users);
-
     if(loading) {
         return <LoadingPage >Loading users..</LoadingPage>
     };
