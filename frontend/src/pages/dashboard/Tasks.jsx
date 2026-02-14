@@ -13,17 +13,18 @@ import Button from "../../components/UI/Button.jsx";
 export default function Tasks() {
     const { tasks, loading, fetchOpenTasks, assignTask } = useContext(TaskContext);
 
-    const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
+    const [searchInput, setSearchInput] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
-        fetchOpenTasks({page: 1, search: ""});
-    }, [page, fetchOpenTasks]);
+        fetchOpenTasks({page: 1, search: searchQuery});
+    }, [page, searchQuery, fetchOpenTasks]);
 
     const handleSubmitSearch = (e) => {
         e.preventDefault();
         setPage(1);
-        fetchOpenTasks({page, search});
+        setSearchQuery(searchInput.trim());
     }
 
     async function handleAssignTask(id) {
@@ -44,23 +45,23 @@ export default function Tasks() {
             <div className="container mx-auto p-10 mt-10">
                 <GlassmorphicCard table>
                     <div className="head flex justify-between items-center p-2 mb-2">
-                        <h1 className="font-bold text-xl">Users</h1>
+                        <h1 className="font-bold text-xl">Tasks</h1>
                         <form onSubmit={handleSubmitSearch}>
                             <input 
                             className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" 
                             type="search" 
                             name="search" 
                             id="search" 
-                            value={search}
+                            value={searchInput}
                             placeholder="Search"
                             onChange={(e) => {
                                 const val = e.target.value;
-                                setSearch(val);
+                                setSearchInput(val);
 
                                 if(val === "")
                                 {
                                     setPage(1);
-                                    fetchOpenTasks({page: 1, search: ""});
+                                    setSearchQuery("");
                                 }
                             }}
                             />
@@ -68,7 +69,7 @@ export default function Tasks() {
                             className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" 
                             type="submit" 
                             value="Search" 
-                            disabled={!search.trim()}
+                            disabled={!searchInput.trim()}
                             />    
                         </form>                    
                     </div>
@@ -108,7 +109,7 @@ export default function Tasks() {
                         <PagePagination 
                             currentPage={tasks?.data?.current_page}
                             lastPage={tasks?.data?.last_page}
-                            onPageChange={(t) =>fetchOpenTasks({page: t, search})}
+                            onPageChange={(t) =>fetchOpenTasks({page: t, searchInput})}
                         />
                         )}
                     </div>

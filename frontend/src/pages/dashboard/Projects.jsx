@@ -34,7 +34,7 @@ export default function Projects() {
         <div className="container mx-auto p-10 mt-10">
             <GlassmorphicCard table>
                 <div className="head flex justify-between items-center p-2 mb-2">
-                    <h1 className="font-bold text-xl">Users</h1>
+                    <h1 className="font-bold text-xl">Projects</h1>
                     <form onSubmit={handleSubmitSearch}>
                         <input 
                         className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" 
