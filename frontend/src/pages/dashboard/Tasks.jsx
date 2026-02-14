@@ -104,7 +104,7 @@ export default function Tasks() {
                     }
                     </Table>
                     <div className="footer mt-2">
-                        {tasks.data.last_page > 1 && (
+                        {tasks?.data?.last_page > 1 && (
                         <PagePagination 
                             currentPage={tasks?.data?.current_page}
                             lastPage={tasks?.data?.last_page}
