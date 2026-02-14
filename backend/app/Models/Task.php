@@ -49,15 +49,17 @@ class Task extends Model
         return $this->belongsTo(Status::class);
     }
 
-    // public function isOpen(): bool {
-    //     return $this->status->name === "open";
-    // }
+    public function scopeSearch($query, ?string $term){
+        $term = trim((string) $term);
 
-    // public function isInProgress(): bool {
-    //     return $this->status->name === "in_progress";
-    // }
+        if($term === ""){
+            return $query;
+        }
 
-    // public function isCompleted(): bool {
-    //     return $this->status->name === "completed";
-    // }
+        return $query->where(function($q) use ($term){
+            $q->where("title", "like", "%{$term}%")
+            ->orWhere("description", "like", "%{$term}%")
+            ->orWhere("assigned_to", "like", "%{$term}");
+        });
+    }
 }

@@ -4,9 +4,8 @@ namespace Database\Seeders\Task;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Project;
 use App\Models\Task;
+use App\Models\Status;
 
 class TasksSeeder extends Seeder
 {
@@ -15,19 +14,8 @@ class TasksSeeder extends Seeder
      */
     public function run(): void
     {
-        Task::factory()
-        ->count(5)
-        ->open()
-        ->create();
-
-        Task::factory(3)
-        ->count(3)
-        ->inProgress()
-        ->create();
-
-        Task::factory(2)
-        ->count(2)
-        ->completed()
-        ->create();
+        Task::factory()->count(10)->open()->create();
+        Task::factory()->count(5)->inProgress()->create();
+        Task::factory()->count(5)->completed()->create();
     }
 }

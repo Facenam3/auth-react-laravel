@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Task\SearchTaskRequest;
 use App\Http\Requests\Task\TaskRequest;
 use App\Models\Task;
 use App\Models\Status;
@@ -60,8 +61,14 @@ class TaskController extends Controller
         ], status: 200);
     }
 
-    public function allTasks() {
-        $tasks = Task::with(['creator', 'assignee', 'completor', 'status', 'category', 'project'])->paginate(10);
+    public function allTasks(SearchTaskRequest $request) {
+        
+        $tasks = Task::query()
+        ->select(["id","title","description", "status_id", "category_id","project_id","assigned_to","created_by","completed_by"])
+        ->search($request->query("search"))
+        ->with(['creator', 'assignee', 'completor', 'status', 'category', 'project'])
+        ->orderByDesc("id")
+        ->paginate(10);
 
         return response()->json(data: [
             'tasks' => $tasks,
@@ -69,18 +76,23 @@ class TaskController extends Controller
         ], status: 200);
     }
 
-    public function openTasks() {
-        $tasks = Task::with([
-            'creator', 
-            'assignee', 
-            'completor', 
-            'category', 
-            'project',
-            'status',
+    public function openTasks(SearchTaskRequest $request) {
+
+        $openStatusId = Status::where("name", "open")->value("id");
+
+        $tasks = Task::query()
+        ->select(["id","title","description", "status_id", "category_id","project_id","assigned_to","created_by","completed_by"])
+        ->search($request->query("search"))
+        ->where("status_id", $openStatusId)
+        ->with([
+            'creator:id,name', 
+            'assignee:id,name', 
+            'completor:id,name', 
+            'category:id,name', 
+            'project:id,name',
+            'status:id,name',
         ])
-        ->whereHas("status", function ($q) {
-            $q->where("name", "open");
-        })
+        ->orderByDesc("id")
         ->paginate(10);
 
         return response()->json([

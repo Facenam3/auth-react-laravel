@@ -105,7 +105,6 @@ export function UserContextProvider({children}) {
         try {
             const res =  await getUsers(search, page);
 
-            console.log(res);
             dispatchUserAction({ 
                 type: "SET_USERS", 
                 payload: res.data,
