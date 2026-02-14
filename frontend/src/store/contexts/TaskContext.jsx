@@ -88,11 +88,21 @@ function taskReducer(state, action) {
 export function TaskContextProvider({children}) {
     const [task, dispatchTaskAction] = useReducer(taskReducer, initialState);
 
-    const fetchTasks = async (page = 1) => {
+    const fetchTasks = async (arg = {}, maybeSearch) => {
+        let page = 1;
+        let search = "";
+
+        if(typeof arg === "number"){
+            page = arg;
+            search = typeof maybeSearch === "string" ? maybeSearch : "";
+        } else {
+            ({page = 1, search = ""} = arg || {});
+        }
+
         dispatchTaskAction({ type: "SET_LOADING"});
 
         try {
-            const res = await api.getTasks(page);
+            const res = await api.getTasks(search, page);
 
             dispatchTaskAction({
                 type: "SET_TASKS",
@@ -114,13 +124,23 @@ export function TaskContextProvider({children}) {
         }
     }
 
-    const fetchOpenTasks = async (page = 1) => {
+    const fetchOpenTasks = async (arg = {}, maybeSearch) => {
+        let page = 1;
+        let search = "";
+
+        if(typeof arg === "number"){
+            page = arg;
+            search = typeof maybeSearch === "string" ? maybeSearch : "";
+        } else {
+            ({page = 1, search = ""} = arg || {});
+        }
+
         dispatchTaskAction({
             type: "SET_LOADING",
         });
 
         try {
-            const res = await api.getOpenTasks(page);
+            const res = await api.getOpenTasks(search, page);
 
             dispatchTaskAction({
                 type: "SET_TASKS",

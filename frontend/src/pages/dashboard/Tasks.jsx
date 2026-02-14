@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import TaskContext from "../../store/contexts/TaskContext.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
@@ -13,9 +13,18 @@ import Button from "../../components/UI/Button.jsx";
 export default function Tasks() {
     const { tasks, loading, fetchOpenTasks, assignTask } = useContext(TaskContext);
 
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+
     useEffect(() => {
-        fetchOpenTasks();
-    }, [fetchOpenTasks]);
+        fetchOpenTasks({page: 1, search: ""});
+    }, [page, fetchOpenTasks]);
+
+    const handleSubmitSearch = (e) => {
+        e.preventDefault();
+        setPage(1);
+        fetchOpenTasks({page, search});
+    }
 
     async function handleAssignTask(id) {
        const res = await assignTask(id);
@@ -36,9 +45,31 @@ export default function Tasks() {
                 <GlassmorphicCard table>
                     <div className="head flex justify-between items-center p-2 mb-2">
                         <h1 className="font-bold text-xl">Users</h1>
-                        <form action="">
-                            <input className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" type="search" name="search" id="search" placeholder="Search"/>
-                            <input className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" type="submit" value="Search" />    
+                        <form onSubmit={handleSubmitSearch}>
+                            <input 
+                            className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" 
+                            type="search" 
+                            name="search" 
+                            id="search" 
+                            value={search}
+                            placeholder="Search"
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                setSearch(val);
+
+                                if(val === "")
+                                {
+                                    setPage(1);
+                                    fetchOpenTasks({page: 1, search: ""});
+                                }
+                            }}
+                            />
+                            <input 
+                            className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" 
+                            type="submit" 
+                            value="Search" 
+                            disabled={!search.trim()}
+                            />    
                         </form>                    
                     </div>
                     <Table
@@ -75,9 +106,9 @@ export default function Tasks() {
                     <div className="footer mt-2">
                         {tasks.data.last_page > 1 && (
                         <PagePagination 
-                            currentPage={tasks.data.current_page}
-                            lastPage={tasks.data.last_page}
-                            onPageChange={fetchOpenTasks}
+                            currentPage={tasks?.data?.current_page}
+                            lastPage={tasks?.data?.last_page}
+                            onPageChange={(t) =>fetchOpenTasks({page: t, search})}
                         />
                         )}
                     </div>
