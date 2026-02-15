@@ -11,19 +11,20 @@ import TableItem from "../../components/UI/table/TableItem.jsx";
 export default function Users() {
     const { users, loading, fetchUsers } = useContext(UserContext);
 
-    const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
+    const [searchInput, setSearchInput] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
-        fetchUsers({page: 1, search: ""});
-    },[ page, fetchUsers]);
+        fetchUsers({page: 1, search: searchQuery});
+    },[ page, searchQuery, fetchUsers]);
 
     const usersList = users?.data?.data ?? [];
 
     const handleSubmitSearch = (e) => {
         e.preventDefault();
         setPage(1);
-        fetchUsers({ page, search });
+        setSearchQuery(searchInput.trim());
     }
 
     if(loading) {
@@ -41,15 +42,15 @@ export default function Users() {
                             type="search" 
                             name="search" 
                             id="search" 
-                            value={search}
+                            value={searchInput}
                             placeholder="Search"                            
                             onChange={(e) => {
                                 const val = e.target.value;
-                                setSearch(val);
+                                setSearchInput(val);
 
                                 if(val === ""){
                                     setPage(1);
-                                    fetchUsers({page: 1, search: ""});
+                                    setSearchQuery("");
                                 }
                             }}
                         />
@@ -57,7 +58,7 @@ export default function Users() {
                             className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" 
                             type="submit" 
                             value="Search" 
-                            disabled={!search.trim()}
+                            disabled={!searchInput.trim()}
                         />    
                     </form>                    
                 </div>
@@ -85,7 +86,7 @@ export default function Users() {
                     <PagePagination 
                     currentPage={users?.data?.current_page}
                     lastPage={users?.data?.last_page}
-                    onPageChange={(u) => fetchUsers({page: u, search})}
+                    onPageChange={(u) => fetchUsers({page: u, searchInput})}
                     />
                 </div>
             </GlassmorphicCard>
