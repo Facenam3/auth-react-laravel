@@ -23,6 +23,7 @@ class SearchTaskRequest extends FormRequest
     {
         return [
             "search" => "nullable|string|max:50",
+            "status" => ["nullable", "in:open,in_progress,completed"],
         ];
     }
 }
