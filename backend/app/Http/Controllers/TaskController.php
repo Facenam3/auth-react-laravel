@@ -62,10 +62,13 @@ class TaskController extends Controller
     }
 
     public function allTasks(SearchTaskRequest $request) {
+
+        $statusId = Status::where("name", $request->query("status"))->value("id");
         
         $tasks = Task::query()
         ->select(["id","title","description", "status_id", "category_id","project_id","assigned_to","created_by","completed_by"])
         ->search($request->query("search"))
+        ->status($statusId)
         ->with(['creator', 'assignee', 'completor', 'status', 'category', 'project'])
         ->orderByDesc("id")
         ->paginate(10);

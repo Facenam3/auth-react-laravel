@@ -62,4 +62,13 @@ class Task extends Model
             ->orWhere("assigned_to", "like", "%{$term}");
         });
     }
+
+    public function scopeStatus($query, ?string $statusId) {
+
+        if(!$statusId){
+            return $query;
+        }
+
+        return $query->where('status_id', $statusId);
+    }
 }
