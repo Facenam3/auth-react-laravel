@@ -11,17 +11,18 @@ import TableItem from "../../components/UI/table/TableItem.jsx";
 export default function Projects() {
     const { projects, loading, fetchProjects } = useContext(ProjectContext);
 
-    const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
+    const [searchInput, setSearchInput] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
-        fetchProjects({page: 1, search: ""});
-    }, [page, fetchProjects]);
+        fetchProjects({page: 1, search: searchQuery});
+    }, [page, searchQuery, fetchProjects]);
 
     const handleSubmitSearch = (e) => {
         e.preventDefault();
         setPage(1);
-        fetchProjects({page, search});
+        setSearchQuery(searchInput.trim());
     }
 
     const projectList = projects?.data?.data ?? [];
@@ -41,15 +42,15 @@ export default function Projects() {
                         type="search" 
                         name="search" 
                         id="search" 
-                        value={search}
+                        value={searchInput}
                         placeholder="Search"
                         onChange={(e) => {
                             const val = e.target.value;
-                            setSearch(val);
+                            setSearchInput(val);
 
                             if(val === ""){
                                 setPage(1);
-                                fetchProjects({page: 1, search: ""});
+                                setSearchQuery("");
                             }
                         }}
                         />
@@ -57,7 +58,7 @@ export default function Projects() {
                         className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" 
                         type="submit" 
                         value="Search"
-                        disabled={!search.trim()}
+                        disabled={!searchInput.trim()}
                         />    
                     </form>                    
                 </div>
@@ -86,7 +87,7 @@ export default function Projects() {
                     <PagePagination 
                     currentPage={projects?.data?.current_page}
                     lastPage={projects?.data?.last_page}
-                    onPageChange={(p) => fetchProjects({ page: p, search})}
+                    onPageChange={(p) => fetchProjects({ page: p, searchInput})}
                     />
                 </div>
             </GlassmorphicCard>
