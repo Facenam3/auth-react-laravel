@@ -28,7 +28,5 @@ class DatabaseSeeder extends Seeder
             CategoriesSeeder::class,   
             TasksSeeder::class,                   
         ]);
-
-        
     }
 }

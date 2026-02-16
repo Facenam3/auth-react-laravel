@@ -13,25 +13,24 @@ class CategoriesSeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = [
+        Category::insert(
             [
-                "name" => "Frontend",
-            ], 
-            [
-                "name" => "Backend",
-            ],
-            [
-                "name" => "Database",
-            ],
-            [
-                "name" => "Testing",
-            ],
-        ];
-
-        foreach($categories as $data) {
-            Category::create([
-                "name" => $data["name"],
-            ]);
-        }
+                [
+                    "name" => "Frontend",
+                ], 
+                [
+                    "name" => "Backend",
+                ],
+                [
+                    "name" => "Database",
+                ],
+                [
+                    "name" => "QA",
+                ],
+                [
+                    "name" => "DevOps",
+                ],
+            ]
+        );
     }
 }
