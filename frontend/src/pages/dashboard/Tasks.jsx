@@ -9,6 +9,7 @@ import TableRow from "../../components/UI/table/TableRow.jsx";
 import TableItem from "../../components/UI/table/TableItem.jsx";
 import ButtonSubmit from "../../components/UI/form/ButtonSubmit.jsx";
 import Button from "../../components/UI/Button.jsx";
+import SelectInput from "../../components/UI/form/SelectInput.jsx";
 
 export default function Tasks() {
     const { tasks, loading, fetchOpenTasks, assignTask } = useContext(TaskContext);
@@ -16,6 +17,8 @@ export default function Tasks() {
     const [page, setPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
+
+    console.log(tasks);
 
     useEffect(() => {
         fetchOpenTasks({page: 1, search: searchQuery});
@@ -46,7 +49,20 @@ export default function Tasks() {
                 <GlassmorphicCard table>
                     <div className="head flex justify-between items-center p-2 mb-2">
                         <h1 className="font-bold text-xl">Tasks</h1>
-                        <form onSubmit={handleSubmitSearch}>
+                        <form className="flex items-center gap-3" onSubmit={handleSubmitSearch}>
+                            <SelectInput
+                                name="category_id"
+                                id="category_id"
+                                placeholder="Filter By Category"
+                                required="false"
+                                cssClasses=""
+                                options={[
+                                    {value: "Alex Shields", label: "Alex Shields"},
+                                    {value: "Zakary Kautzer", label: "Zakary Kautzer"},
+                                    {value: "Peggie Lang", label: "Peggie Lang"},
+                                    {value: "Leila Schowlater", label: "Leila Schowlater"},
+                                ]}
+                            />
                             <input 
                             className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" 
                             type="search" 

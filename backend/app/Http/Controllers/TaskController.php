@@ -85,7 +85,7 @@ class TaskController extends Controller
     public function openTasks(SearchTaskRequest $request) {
 
         $openStatusId = Status::where("name", "open")->value("id");
-        $categoryId = Category::where("name", $request->query("category"))->value("id");
+        $categoryId = $request->query("category_id");
 
         $tasks = Task::query()
         ->select(["id","title","description", "status_id", "category_id","project_id","assigned_to","created_by","completed_by"])
