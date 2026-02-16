@@ -71,4 +71,12 @@ class Task extends Model
 
         return $query->where('status_id', $statusId);
     }
+
+    public function scopeCategory($query, ?string $categoryId){
+        if(!$categoryId){
+            return $query;
+        }
+
+        return $query->where("category_id", $categoryId);
+    }
 }
