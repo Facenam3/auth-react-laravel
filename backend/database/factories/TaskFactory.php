@@ -54,7 +54,7 @@ class TaskFactory extends Factory
             'description' => $this->faker->paragraph(2),
 
             'project_id'  => Project::factory(),
-            'category_id' => Category::factory(),
+            'category_id' => Category::inRandomOrder()->value('id'),
 
             'created_by'  => User::factory(),
             'assigned_to' => User::factory(),
