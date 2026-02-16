@@ -124,15 +124,17 @@ export function TaskContextProvider({children}) {
         }
     }
 
-    const fetchOpenTasks = async (arg = {}, maybeSearch) => {
+    const fetchOpenTasks = async (arg = {}, maybeSearch, maybeCategory) => {
         let page = 1;
         let search = "";
+        let category_id = null;
 
         if(typeof arg === "number"){
             page = arg;
             search = typeof maybeSearch === "string" ? maybeSearch : "";
+            category_id = typeof maybeCategory === "number" ? maybeCategory : "";
         } else {
-            ({page = 1, search = ""} = arg || {});
+            ({page = 1, search = "", category_id = ""} = arg || {});
         }
 
         dispatchTaskAction({
@@ -140,7 +142,7 @@ export function TaskContextProvider({children}) {
         });
 
         try {
-            const res = await api.getOpenTasks(search, page);
+            const res = await api.getOpenTasks(search, page, category_id);
 
             dispatchTaskAction({
                 type: "SET_TASKS",

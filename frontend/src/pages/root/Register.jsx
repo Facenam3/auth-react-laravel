@@ -79,12 +79,16 @@ export default function RegisterPage() {
                 {formErrors.phone && (
                     <p className="text-red-500 text-sm mt-2">{formErrors.phone}</p>
                 )}
-                <SelectInput 
-                    option1="male"
-                    option2="female"
-                    label="gender"
+                <SelectInput
+                    label="Gender"
                     name="gender"
+                    placeholder="Select Gender"
                     errors={formErrors.gender}
+                    required
+                    options={[
+                        { value: "male", label: "Male" },
+                        { value: "female", label: "Female" },
+                    ]}
                 />
                 <div className="flex justify-center items-center">
                     <ButtonSubmit

@@ -1,11 +1,11 @@
 import api from "./axios";
 
-export const getTasks = (search, page) => {
-    return api.get("/task/show-all", {params: {search, page}});
+export const getTasks = (search, page, status_id, category_id) => {
+    return api.get("/task/show-all", {params: {search, page, status_id, category_id}});
 } 
 
-export const getOpenTasks = (search, page) => {
-    return api.get("/task/open-tasks", {params: {search, page}});
+export const getOpenTasks = (search, page, category_id) => {
+    return api.get("/task/open-tasks", {params: {search, page, category_id}});
 }
 
 export const assignTask = (taskId) => {

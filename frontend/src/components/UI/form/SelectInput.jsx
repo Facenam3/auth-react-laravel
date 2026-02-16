@@ -1,17 +1,34 @@
-export default function SelectInput({option1, option2, label, name, erorrs}) {
+export default function SelectInput({
+    label, 
+    name,
+    options = [],
+    placeholder = "Select an option", 
+    erorrs,
+    required = false,
+    cssClasses = "mb-3",
+    ...props
+    }) {
     return (
-        <div className="mb-3">
-            <label htmlFor={name} className="block mb-3 text-left">{label}</label>
+        <div className={cssClasses}>
+            {label && <label htmlFor={name} className="block mb-3 text-left">{label}</label>}
             <select 
-                className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md"  
+                {...props}
+                className="bg-gray-50 text-gray-950 w-full px-2 py-1 outline-1 outline-blue-300 rounded-md"   
                 name={name} 
                 id={name}
-                required
+                required={required}
+                defaultValue=""
             >
-            <option selected disabled>Select gender</option>
-                <option value={option1}>{option1}</option>
-                <option value={option2}>{option2}</option>
+                <option value="" disabled>
+                    {placeholder}
+                </option>
+                {options.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
             </select>
+
             {erorrs && (
                 <p className="text-red-500 text-sm mt-2">{erorrs}</p>
             )}

@@ -24,7 +24,7 @@ class SearchTaskRequest extends FormRequest
         return [
             "search" => "nullable|string|max:50",
             "status" => ["nullable", "in:open,in_progress,completed"],
-            "category" => ["nullable", "string"],
+            "category" => ["nullable", "integer", "exists:categories,id"],
         ];
     }
 }
