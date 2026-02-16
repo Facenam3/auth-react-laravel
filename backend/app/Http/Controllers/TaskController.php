@@ -6,6 +6,7 @@ use App\Http\Requests\Task\SearchTaskRequest;
 use App\Http\Requests\Task\TaskRequest;
 use App\Models\Task;
 use App\Models\Status;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -64,11 +65,13 @@ class TaskController extends Controller
     public function allTasks(SearchTaskRequest $request) {
 
         $statusId = Status::where("name", $request->query("status"))->value("id");
+        $categoryId = Category::where("name", $request->query("category"))->value("id");
         
         $tasks = Task::query()
         ->select(["id","title","description", "status_id", "category_id","project_id","assigned_to","created_by","completed_by"])
         ->search($request->query("search"))
         ->status($statusId)
+        ->category($categoryId)
         ->with(['creator', 'assignee', 'completor', 'status', 'category', 'project'])
         ->orderByDesc("id")
         ->paginate(10);
@@ -82,10 +85,12 @@ class TaskController extends Controller
     public function openTasks(SearchTaskRequest $request) {
 
         $openStatusId = Status::where("name", "open")->value("id");
+        $categoryId = Category::where("name", $request->query("category"))->value("id");
 
         $tasks = Task::query()
         ->select(["id","title","description", "status_id", "category_id","project_id","assigned_to","created_by","completed_by"])
         ->search($request->query("search"))
+        ->category($categoryId)
         ->where("status_id", $openStatusId)
         ->with([
             'creator:id,name', 
