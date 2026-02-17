@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 
+import * as api from "../../api/categories.js";
+
 import TaskContext from "../../store/contexts/TaskContext.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
 import PagePagination from "../../components/UI/PagePagination.jsx";
@@ -7,27 +9,36 @@ import LoadingPage from "../../components/UI/Loading.jsx";
 import Table from "../../components/UI/table/Table.jsx";
 import TableRow from "../../components/UI/table/TableRow.jsx";
 import TableItem from "../../components/UI/table/TableItem.jsx";
-import ButtonSubmit from "../../components/UI/form/ButtonSubmit.jsx";
 import Button from "../../components/UI/Button.jsx";
 import SelectInput from "../../components/UI/form/SelectInput.jsx";
 
 export default function Tasks() {
     const { tasks, loading, fetchOpenTasks, assignTask } = useContext(TaskContext);
 
+    const [categories, setCategories] = useState([]);
     const [page, setPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-
-    console.log(tasks);
+    const [category_id, setCategoryId] = useState(null);
 
     useEffect(() => {
-        fetchOpenTasks({page: 1, search: searchQuery});
-    }, [page, searchQuery, fetchOpenTasks]);
+        fetchOpenTasks({page: 1, search: searchQuery, category_id});
+    }, [page, searchQuery,category_id, fetchOpenTasks]);
+
+    useEffect(() => {
+        const loadCategories = async () => {
+            const res = await api.getCategories();
+            setCategories(res.data.categories.data);
+        }
+
+        loadCategories();
+    }, []);
 
     const handleSubmitSearch = (e) => {
         e.preventDefault();
         setPage(1);
         setSearchQuery(searchInput.trim());
+        setCategoryId(category_id);
     }
 
     async function handleAssignTask(id) {
@@ -54,14 +65,17 @@ export default function Tasks() {
                                 name="category_id"
                                 id="category_id"
                                 placeholder="Filter By Category"
-                                required="false"
                                 cssClasses=""
+                                onChange={(e) => 
+                                    setCategoryId(e.target.value ? Number(e.target.value) : null)
+                                }
                                 options={[
-                                    {value: "Alex Shields", label: "Alex Shields"},
-                                    {value: "Zakary Kautzer", label: "Zakary Kautzer"},
-                                    {value: "Peggie Lang", label: "Peggie Lang"},
-                                    {value: "Leila Schowlater", label: "Leila Schowlater"},
-                                ]}
+                                    {value: "", label: "All Categories"},
+                                    ...categories.map((category)=> ({
+                                        value:category.id, 
+                                        label:category.name
+                                    }))]
+                                }
                             />
                             <input 
                             className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" 
