@@ -29,7 +29,8 @@ class StatusController extends Controller
     public function store(StatusRequest $request)
     {
         $status = Status::create([
-            'name' => $request->name
+            'name' => $request->name,
+            "name" => $request->type,
         ]);
 
         return response()->json(data: [
@@ -52,7 +53,7 @@ class StatusController extends Controller
     }
 
     public function allStatuses() {
-        $statuses = Status::paginate(10);
+        $statuses = Status::all();
 
         return response()->json(data: [
             'statuses' => $statuses,
@@ -81,7 +82,8 @@ class StatusController extends Controller
         $status = Status::findorFail($id);
 
         $status->update([
-            'name' => $request->name
+            'name' => $request->name,
+            "type" => $request->type,
         ]);
 
         return response()->json(data: [

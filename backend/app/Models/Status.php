@@ -10,11 +10,16 @@ class Status extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
+        "type",
     ];
 
     public function tasks() {
         return $this->hasMany(Task::class);
+    }
+
+    public function projects() {
+        return $this->hasMany(Project::class);
     }
 
     // public static function open(): self
