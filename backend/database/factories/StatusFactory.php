@@ -18,6 +18,10 @@ class StatusFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'type' => fake()->randomElement([
+                'task',
+                'project'
+            ]),
         ];
     }
 }

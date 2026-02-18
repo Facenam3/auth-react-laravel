@@ -22,18 +22,15 @@ class Status extends Model
         return $this->hasMany(Project::class);
     }
 
-    // public static function open(): self
-    // {
-    //     return static::where('name', 'open')->firstOrFail();
-    // }
+    public function scopeTask($q) {
+        return $q->where('type', 'task');
+    }
 
-    // public static function inProgress(): self
-    // {
-    //     return static::where('name', 'in_progress')->firstOrFail();
-    // }
+    public function scopeProject($q) {
+        return $q->where("type", "project");
+    }
 
-    // public static function completed(): self
-    // {
-    //     return static::where('name', 'completed')->firstOrFail();
-    // }
+    public function scopeName($q, string $name) {
+        return $q->where("name", $name);
+    }
 }
