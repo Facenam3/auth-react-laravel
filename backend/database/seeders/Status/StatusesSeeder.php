@@ -14,9 +14,38 @@ class StatusesSeeder extends Seeder
     public function run(): void
     {
         Status::insert([
-            ['name' => 'open'],
-            ['name' => 'in_progress'],
-            ['name' => 'completed'],
+            [
+                'name' => 'open',
+                "type" => "tasks",
+            ],
+            [
+                'name' => 'in_progress',
+                'type' => 'tasks',
+            ],
+            [
+                'name' => 'reviewed',
+                'type' => 'tasks'
+            ],
+            [
+                'name' => 'completed',
+                'type' => 'tasks',
+            ],
+            [
+                'name' => 'planning',
+                'type' => 'projects',
+            ],
+            [
+                'name' => 'active',
+                'type' => 'projects',
+            ],
+            [
+                'name' => 'completed',
+                'type' => 'projects',
+            ],
+            [
+                'name' => 'archived',
+                'type' => 'projects',
+            ],
         ]);
     }
 }
