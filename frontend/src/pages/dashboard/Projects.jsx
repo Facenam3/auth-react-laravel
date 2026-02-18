@@ -78,7 +78,7 @@ export default function Projects() {
                                 <TableItem>{project.description.substring(0, 20) + " ..."}</TableItem>
                                 <TableItem>{project.status.name}</TableItem>
                                 <TableItem>{project.start_date}</TableItem>
-                                <TableItem>{project.ending_date ?? "No date"}</TableItem>
+                                <TableItem>{project.end_date ?? "No date"}</TableItem>
                             </TableRow>
                         ))
                     }
