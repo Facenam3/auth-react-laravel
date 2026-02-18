@@ -23,14 +23,14 @@ class Status extends Model
     }
 
     public function scopeTask($q) {
-        return $q->where('type', 'task');
+        return $q->where('type', 'tasks');
     }
 
     public function scopeProject($q) {
-        return $q->where("type", "project");
+        return $q->where("type", "projects");
     }
 
-    public function scopeName($q, string $name) {
+    public function scopeNamed($q, string $name) {
         return $q->where("name", $name);
     }
 }
