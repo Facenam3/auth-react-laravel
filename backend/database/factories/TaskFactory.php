@@ -25,9 +25,10 @@ class TaskFactory extends Factory
         }
 
         static::$statusIds = [
-            'open'        => Status::where('name', 'open')->value('id'),
-            'in_progress' => Status::where('name', 'in_progress')->value('id'),
-            'completed'   => Status::where('name', 'completed')->value('id'),
+            'open'        => Status::task()->named('open')->value('id'),
+            'in_progress' => Status::task()->named('in_progress')->value('id'),
+            'reviewed'    => Status::task()->named('reviewed')->value('id'),
+            'completed'   => Status::task()->named('completed')->value('id'),
         ];
 
         foreach(static::$statusIds as $name => $id) {
@@ -64,16 +65,16 @@ class TaskFactory extends Factory
         ];
     }
 
-        public function open()
-        {
-            $ids = static::statusIds();
+    public function open()
+    {
+        $ids = static::statusIds();
 
-            return $this->state(fn () => [
-                'status_id' => $ids["open"],
-                'assigned_to' => null,
-                'completed_by' => null,
-            ]);
-        }
+        return $this->state(fn () => [
+            'status_id' => $ids["open"],
+            'assigned_to' => null,
+            'completed_by' => null,
+        ]);
+    }
 
     public function inProgress(): static
     {
@@ -83,6 +84,23 @@ class TaskFactory extends Factory
             'status_id'    => $ids['in_progress'],
             'completed_by' => null,
         ]);
+    }
+
+    public function reviewed(): static
+    {
+        $ids = static::statusIds();
+
+        return $this->state(fn () => [
+            'status_id'    => $ids['reviewed'],
+            'completed_by' => null,
+        ])->afterCreating(function (Task $task) {
+            if (!$task->assigned_to) {
+                $user = User::factory()->create();
+                $task->assigned_to = $user->id;
+            }
+
+            $task->save();
+        });
     }
 
 
