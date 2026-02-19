@@ -34,6 +34,8 @@ Route::prefix("status")->group(function() {
     Route::post("/store", [StatusController::class, "store"]);
     Route::get("/show/{id}", [StatusController::class, "show"]);
     Route::get("/show-all", [StatusController::class, 'allStatuses']);
+    Route::get("/project-statuses", [StatusController::class, "projectStatuses"]);
+    Route::get("/task-statues", [StatusController::class, "taskStatuses"]);
     Route::get("/edit/{id}", [StatusController::class, "edit"]);
     Route::put("/update/{id}", [StatusController::class, "update"]);
     Route::delete("/delete/{id}", [StatusController::class, "destroy"]);

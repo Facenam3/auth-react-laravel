@@ -62,7 +62,9 @@ class ProjectController extends Controller
 
     public function allProjects(SearchProjectRequest $request) {
 
-        $status_id = Status::where("name", $request->query("status"))->value("id");
+        $status_id = Status::project()
+            ->named($request->query("status"))
+            ->value("id");
 
         $projects = Project::query()
         ->search($request->query("search"))

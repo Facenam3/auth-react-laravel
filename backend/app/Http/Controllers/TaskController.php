@@ -64,7 +64,9 @@ class TaskController extends Controller
 
     public function allTasks(SearchTaskRequest $request) {
 
-        $statusId = Status::where("name", $request->query("status"))->value("id");
+        $statusId = Status::tasks()
+                ->where("name", $request->query("status"))
+                ->value("id");
         $categoryId = Category::where("name", $request->query("category"))->value("id");
         
         $tasks = Task::query()
