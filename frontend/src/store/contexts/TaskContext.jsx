@@ -134,7 +134,7 @@ export function TaskContextProvider({children}) {
             search = typeof maybeSearch === "string" ? maybeSearch : "";
             category_id = typeof maybeCategory === "number" ? maybeCategory : "";
         } else {
-            ({page = 1, search = "", category_id = ""} = arg || {});
+            ({page = 1, search = "", category_id = null} = arg || {});
         }
 
         dispatchTaskAction({
