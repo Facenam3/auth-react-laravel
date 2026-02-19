@@ -23,6 +23,7 @@ class SearchProjectRequest extends FormRequest
     {
         return [
             "search" => "nullable|string|max:50",
+            "status" => ["nullable", "in:planning,active,completed,archived"],
         ];
     }
 }

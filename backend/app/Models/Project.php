@@ -46,4 +46,12 @@ class Project extends Model
             ->orWhere("description", "like", "%{$term}%");
         });
     }
+
+    public function scopeStatus($query, ?string $status_id) {
+        if(!$status_id) {
+            return $query;
+        }
+
+        return $query->where("status_id", $status_id);
+    }
 }
