@@ -62,8 +62,11 @@ class ProjectController extends Controller
 
     public function allProjects(SearchProjectRequest $request) {
 
+        $status_id = Status::where("name", $request->query("status"))->value("id");
+
         $projects = Project::query()
         ->search($request->query("search"))
+        ->status($status_id)
         ->with(['user', 'status', 'tasks'])
         ->orderByDesc("id")
         ->paginate(10);
