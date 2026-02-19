@@ -66,6 +66,7 @@ export default function Tasks() {
                                 id="category_id"
                                 placeholder="Filter By Category"
                                 cssClasses=""
+                                value={category_id ?? ""}
                                 onChange={(e) => 
                                     setCategoryId(e.target.value ? Number(e.target.value) : null)
                                 }
@@ -139,7 +140,7 @@ export default function Tasks() {
                         <PagePagination 
                             currentPage={tasks?.data?.current_page}
                             lastPage={tasks?.data?.last_page}
-                            onPageChange={(t) =>fetchOpenTasks({page: t, searchInput})}
+                            onPageChange={(t) =>fetchOpenTasks({page: t, searchInput, category_id})}
                         />
                         )}
                     </div>

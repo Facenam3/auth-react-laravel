@@ -95,7 +95,7 @@ export function ProjectContextProvider({children}) {
             search = typeof maybeSearch === "string" ? maybeSearch : "";
             status_id = typeof maybeStatus === "number" ? maybeStatus : null;
         } else {
-            ({page = 1, search = "", status_id = ""} = arg || {});
+            ({page = 1, search = "", status_id = null} = arg || {});
         }
 
         dispatchProjectAction({ type: "SET_LOADING"});

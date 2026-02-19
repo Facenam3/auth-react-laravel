@@ -9,6 +9,7 @@ import LoadingPage from "../../components/UI/Loading.jsx";
 import Table from "../../components/UI/table/Table.jsx";
 import TableRow from "../../components/UI/table/TableRow.jsx";
 import TableItem from "../../components/UI/table/TableItem.jsx";
+import SelectInput from "../../components/UI/form/SelectInput.jsx";
 
 export default function Projects() {
     const { projects, loading, fetchProjects } = useContext(ProjectContext);
@@ -20,15 +21,13 @@ export default function Projects() {
     const [status_id, setStatusId] = useState(null);
 
     useEffect(() => {
-        fetchProjects({page: 1, search: searchQuery, status_id});
+        fetchProjects({page, search: searchQuery, status_id});
     }, [page, searchQuery, status_id, fetchProjects]);
 
     useEffect(() => {
         const loadStatuses = async () => {
             const res = await api.getProjectStatuses();
-
-            console.log(res.data.statuses);
-            setStatuses(res.data.statuses.data);
+            setStatuses(res.data.statuses);
         }
 
         loadStatuses();
@@ -38,6 +37,7 @@ export default function Projects() {
         e.preventDefault();
         setPage(1);
         setSearchQuery(searchInput.trim());
+        setStatusId(status_id);
     }
 
     const projectList = projects?.data?.data ?? [];
@@ -51,23 +51,40 @@ export default function Projects() {
             <GlassmorphicCard table>
                 <div className="head flex justify-between items-center p-2 mb-2">
                     <h1 className="font-bold text-xl">Projects</h1>
-                    <form onSubmit={handleSubmitSearch}>
-                        <input 
-                        className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" 
-                        type="search" 
-                        name="search" 
-                        id="search" 
-                        value={searchInput}
-                        placeholder="Search"
-                        onChange={(e) => {
-                            const val = e.target.value;
-                            setSearchInput(val);
-
-                            if(val === ""){
-                                setPage(1);
-                                setSearchQuery("");
+                    <form className="flex justify-center items-center gap-3" onSubmit={handleSubmitSearch}>
+                        <SelectInput
+                            name="status_id"
+                            id="status_id"
+                            placeholder="Filter by Statuses"
+                            value={status_id ?? ''}
+                            cssClasses=""
+                            onChange={(e) => 
+                                setStatusId(e.target.value ? Number(e.target.value) : null)
                             }
-                        }}
+                            options={[
+                                {value: "" ,label: "All Statuses"},
+                                ...statuses.map((status) => ({
+                                    value: status.id,
+                                    label: status.name
+                                }))
+                            ]}
+                        />
+                        <input 
+                            className="bg-white text-gray-950 mr-3 rounded-md px-2 py-1" 
+                            type="search" 
+                            name="search" 
+                            id="search" 
+                            value={searchInput}
+                            placeholder="Search"
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                setSearchInput(val);
+
+                                if(val === ""){
+                                    setPage(1);
+                                    setSearchQuery("");
+                                }
+                            }}
                         />
                         <input 
                         className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-700 hover:text-gray-100 border-2 border-gray-50" 
@@ -102,7 +119,7 @@ export default function Projects() {
                     <PagePagination 
                     currentPage={projects?.data?.current_page}
                     lastPage={projects?.data?.last_page}
-                    onPageChange={(p) => fetchProjects({ page: p, searchInput})}
+                    onPageChange={(p) => fetchProjects({ page: p, searchInput, status_id})}
                     />
                 </div>
             </GlassmorphicCard>
