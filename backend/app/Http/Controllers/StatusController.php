@@ -52,6 +52,28 @@ class StatusController extends Controller
         ], status: 200);
     }
 
+    public function projectStatuses() {
+        $statuses = Status::project()
+        ->select("id", "name")
+        ->get();
+
+         return response()->json(data: [
+            'statuses' => $statuses,
+            'message' => "Showing all project statuses",
+        ], status: 200);
+    }
+
+    public function taskStatuses() {
+        $statuses = Status::task()
+        ->select("id","name")
+        ->get();
+
+         return response()->json(data: [
+            'statuses' => $statuses,
+            'message' => "Showing all task statuses",
+        ], status: 200);
+    }
+
     public function allStatuses() {
         $statuses = Status::all();
 

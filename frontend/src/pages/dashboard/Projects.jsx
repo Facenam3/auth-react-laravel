@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 
+import * as api from "../../api/status.js";
+
 import ProjectContext from "../../store/contexts/ProjectContext.jsx";
 import GlassmorphicCard from "../../components/UI/GlassmorphicCard.jsx";
 import PagePagination from "../../components/UI/PagePagination.jsx";
@@ -11,13 +13,26 @@ import TableItem from "../../components/UI/table/TableItem.jsx";
 export default function Projects() {
     const { projects, loading, fetchProjects } = useContext(ProjectContext);
 
+    const [statuses, setStatuses] = useState([]);
     const [page, setPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
+    const [status_id, setStatusId] = useState(null);
 
     useEffect(() => {
-        fetchProjects({page: 1, search: searchQuery});
-    }, [page, searchQuery, fetchProjects]);
+        fetchProjects({page: 1, search: searchQuery, status_id});
+    }, [page, searchQuery, status_id, fetchProjects]);
+
+    useEffect(() => {
+        const loadStatuses = async () => {
+            const res = await api.getProjectStatuses();
+
+            console.log(res.data.statuses);
+            setStatuses(res.data.statuses.data);
+        }
+
+        loadStatuses();
+    } , []);
 
     const handleSubmitSearch = (e) => {
         e.preventDefault();
